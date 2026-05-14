@@ -172,3 +172,40 @@ nav, .nav-glass {
     transform: scale(1.2) rotate(90deg);
     transition: 0.3s;
 }
+
+/* Mobile Phone එක සඳහා විශේෂිත සැකසුම් (Screen width 768px ට අඩු විට) */
+@media (max-width: 768px) {
+    nav, .nav-glass {
+        width: 90%;       /* දෙපැත්තෙන් ඉඩ වැඩි කිරීම */
+        top: 10px;        /* ඉහළ සිට ඇති පරතරය අඩු කිරීම */
+        padding: 8px 0;   /* උස මඳක් අඩු කිරීම */
+    }
+
+    #nav-menu {
+        gap: 5px;         /* ලිංක් අතර පරතරය පාලනය */
+    }
+
+    #nav-menu li {
+        margin: 5px 8px;  /* ලිංක් එකිනෙකට ලං කිරීම */
+    }
+
+    #nav-menu li a {
+        font-size: 13px;  /* අකුරු ප්‍රමාණය කුඩා කිරීම */
+        letter-spacing: 0.5px;
+    }
+}
+
+/* ඉතා කුඩා Phone සඳහා (Screen width 480px ට අඩු විට) */
+@media (max-width: 480px) {
+    nav, .nav-glass {
+        width: 95%;       /* තවත් පළල් කිරීම */
+    }
+
+    #nav-menu li {
+        margin: 3px 6px;  /* පරතරය තවත් අඩු කිරීම */
+    }
+
+    #nav-menu li a {
+        font-size: 12px;  /* අකුරු තවත් කුඩා කිරීම */
+    }
+}
