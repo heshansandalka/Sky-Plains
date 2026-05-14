@@ -170,3 +170,17 @@ window.onclick = function(event) {
         closeUploadModal();
     }
 }
+function toggleMobileMenu() {
+    const navLinks = document.getElementById('navLinks');
+    // 'show' class එක තිබේ නම් ඉවත් කරයි, නැත්නම් එකතු කරයි
+    navLinks.classList.toggle('show');
+}
+
+// පිටත ක්ලික් කළහොත් මෙනුව ඉබේම වැසීමට (Optional)
+window.addEventListener('click', function(e) {
+    const navLinks = document.getElementById('navLinks');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    if (!menuBtn.contains(e.target) && !navLinks.contains(e.target)) {
+        navLinks.classList.remove('show');
+    }
+});

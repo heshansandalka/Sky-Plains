@@ -195,17 +195,41 @@ nav, .nav-glass {
     }
 }
 
-/* ඉතා කුඩා Phone සඳහා (Screen width 480px ට අඩු විට) */
-@media (max-width: 480px) {
-    nav, .nav-glass {
-        width: 95%;       /* තවත් පළල් කිරීම */
+/* Mobile Styles */
+@media (max-width: 768px) {
+    /* Navbar Padding අඩු කිරීම */
+    nav {
+        padding: 1.5rem 2rem !important;
     }
 
-    #nav-menu li {
-        margin: 3px 6px;  /* පරතරය තවත් අඩු කිරීම */
+    /* ඉරි තුනේ බටන් එක පෙන්වීම */
+    .mobile-menu-btn {
+        display: flex !important;
     }
 
-    #nav-menu li a {
-        font-size: 12px;  /* අකුරු තවත් කුඩා කිරීම */
+    /* මෙනුව සැඟවීම සහ Mobile එකට ගැලපීම */
+    #navLinks {
+        display: none; /* මුලින්ම සඟවයි */
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        padding: 20px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        gap: 20px;
+        z-index: 50;
+    }
+
+    /* Active වූ විට මෙනුව පෙන්වීම */
+    #navLinks.show {
+        display: flex;
+    }
+
+    #navLinks a {
+        width: 100%;
+        border-bottom: 1px solid #f3f4f6;
+        padding-bottom: 10px;
     }
 }
