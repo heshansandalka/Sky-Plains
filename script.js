@@ -148,3 +148,25 @@ function clearInputs() {
     document.getElementById('newDesc').value = "";
     document.getElementById('imageInput').value = "";
 }
+
+// Modal එක විවෘත කිරීමට
+function openUploadModal() {
+    const modal = document.getElementById('uploadModal');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden'; // පිටුව Scroll වීම නවත්වයි
+}
+
+// Modal එක වැසීමට
+function closeUploadModal() {
+    const modal = document.getElementById('uploadModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto'; // නැවත Scroll වීමට ඉඩ දෙයි
+}
+
+// Modal එකෙන් පිටත Click කළහොත් වැසීමට
+window.onclick = function(event) {
+    const modal = document.getElementById('uploadModal');
+    if (event.target == modal) {
+        closeUploadModal();
+    }
+}
