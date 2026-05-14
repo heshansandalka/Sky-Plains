@@ -221,7 +221,7 @@ body:not(.home-page) {
         font-size: 14px; /* අකුරු පොඩ්ඩක් කුඩා කිරීම */
     }
 
-    /* 2. Grid එක පේළියකට 2 බැගින් පෙනෙන්න සැකසීම */
+    
     .diagonal-container {
         grid-template-columns: repeat(2, 1fr); /* තීරු 4 වෙනුවට 2ක් කිරීම */
         grid-template-rows: repeat(4, 30vh); /* උස ප්‍රමාණය වෙනස් කිරීම */
