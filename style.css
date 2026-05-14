@@ -10,6 +10,10 @@ body {
     margin: 0;
     padding: 0;
 }
+/* Gallery පිටුවේ පමණක් මෙය භාවිතා කරන්න */
+body {
+    padding-top: 80px; /* Navbar එකේ උසට වඩා ටිකක් වැඩි ඉඩක් */
+}
 
 /* පිටුවේ ඇති අනවශ්‍ය ඉඩකඩ ඉවත් කිරීමට */
 body {
@@ -18,6 +22,29 @@ body {
     /* පසුබිමේ පින්තූරයක් තිබේ නම් වීදුරු පෙනුම වඩාත් හොඳින් පෙනේ */
     background: url('.jpg') no-repeat center center fixed;
     background-size: cover;
+}
+
+/* Header එකේ Title එකට සියුම් සෙවනැල්ලක් සහ Animation එකක් */
+.font-serif {
+    letter-spacing: -0.02em;
+}
+
+/* Button එක hover කරන විට bounce වන effect එක */
+button:hover svg {
+    transform: scale(1.2) rotate(90deg);
+}
+
+/* Container එකට ඇතුලතින් එන light effect එකක් */
+.bg-white\/40 {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.2) 100%);
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+/* Mobile වලදී අකුරු ප්‍රමාණය ගැලපීම */
+@media (max-width: 640px) {
+    .text-5xl {
+        font-size: 2.5rem;
+    }
 }
 
 nav {
@@ -181,15 +208,7 @@ nav {
 }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-/* Tile Image Links */
-.tile-1 { background-image: url('https://images.unsplash.com/photo-1552728089-57bdde30ebd3?w=800'); }
-.tile-2 { background-image: url('https://images.unsplash.com/photo-1444464666168-49d633b86797?w=800'); }
-.tile-3 { background-image: url('https://images.unsplash.com/photo-1522720833375-9c27ffb02a5e?w=800'); }
-.tile-4 { background-image: url('https://images.unsplash.com/photo-1555169062-013468b47731?w=800'); }
-.tile-5 { background-image: url('https://images.unsplash.com/photo-1551085254-e96b210db58a?w=800'); }
-.tile-6 { background-image: url('https://images.unsplash.com/photo-1480044965905-02098d419e96?w=800'); }
-.tile-7 { background-image: url('https://images.unsplash.com/photo-1549608276-5786d7ff1f1d?w=800'); }
-.tile-8 { background-image: url('https://images.unsplash.com/photo-1516233501032-2ddf76a1337b?w=800'); }
+
 
 
 
@@ -272,6 +291,152 @@ body:not(.home-page) {
         /* Mobile එකේදී උස ප්‍රමාණය හරියට ගැනීමට */
         min-height: 100vh;
         height: auto;
+    }
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    scroll-behavior: smooth;
+}
+
+/* Glassmorphism Navbar */
+.nav-glass {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.nav-link {
+    position: relative;
+    color: #444;
+    transition: color 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: #b45309;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.nav-link.active {
+    color: #b45309;
+    font-weight: 700;
+}
+
+/* Bento Grid Floating Animation */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 1s ease-out forwards;
+}
+
+/* Modal Styling */
+.ai-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.ai-content {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 32px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Mobile Adjustments (Max-width 768px) */
+@media (max-width: 768px) {
+    
+    /* 1. අකුරු වල ප්‍රමාණය නිවැරදිව override කිරීම */
+    h1.text-6xl, h1.text-8xl { 
+        font-size: 2.8rem !important; 
+        line-height: 1.1;
+    }
+    
+    /* 2. Animation එක disable කිරීම */
+    .animate-float { 
+        animation: none !important; 
+        transform: none !important;
+    }
+
+    /* 3. Bento Grid එක Mobile වලට ගැලපෙන ලෙස සකස් කිරීම */
+    /* Tailwind class එකක් නිසා !important භාවිතා කිරීම ආරක්ෂිතයි */
+    div.h-\[600px\] { 
+        height: auto !important; 
+        min-height: 400px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr) !important; /* Column 12 සිට 2 දක්වා අඩු කිරීම */
+        grid-template-rows: auto !important;
+        gap: 10px;
+    }
+
+    /* 4. Hero section එකේ layout එක පේළියට එක බැගින් (Single column) කිරීම */
+    main section {
+        display: flex;
+        flex-direction: column; /* Grid එක වෙනුවට Flex භාවිතා කිරීම වඩාත් පහසුයි */
+        text-align: center;
+        padding-top: 2rem;
+    }
+
+    /* 5. Buttons සහ Text මැදට ගැනීම */
+    .flex.flex-wrap {
+        justify-content: center !important;
+    }
+
+    p.text-lg {
+        max-width: 100% !important;
+        text-align: center;
+    }
+}
+
+/* ඉතා කුඩා Screen (480px) සඳහා වැඩිදුර නිවැරදි කිරීම් */
+@media (max-width: 480px) {
+    h1.text-6xl, h1.text-8xl {
+        font-size: 2.2rem !important;
+    }
+    
+    div.h-\[600px\] {
+        grid-template-columns: 1fr !important; /* එක පේළියට එක පින්තූරය බැගින් */
+        height: auto !important;
+    }
+    
+    .nav-glass .max-w-6xl {
+        padding: 0 1rem;
     }
 }
 

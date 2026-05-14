@@ -3,37 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ELanka - Sri Lankan Heritage & Nature</title>
+    <title>Gallery - Lanka Nature</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-white">
+<body class="bg-stone-50 text-stone-900">
 
-   <nav>
-    <ul id="nav-menu">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="gallery.html">Gallery</a></li>
-    </ul>
-</nav>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Glowing Background Elements -->
+    <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-amber-100/50 blur-[120px] -z-10"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-sky-100/50 blur-[120px] -z-10"></div>
+
+    <nav class="nav-glass">
+        <div class="max-w-6xl mx-auto px-6 flex justify-between items-center h-16">
+            <div class="text-xl font-bold tracking-tighter">E<span class="text-amber-700">LANKA</span></div>
+            <ul id="nav-menu" class="hidden md:flex gap-8 font-medium text-sm uppercase tracking-widest">
+
+                <li><a href="index.html" class="nav-link active">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+               
+            </ul>
+            <button class="md:hidden text-2xl">☰</button>
+        </div>
+    </nav>
     
-    <div class="diagonal-container" id="grid">
-        <div class="bird-tile tile-1"></div>
-        <div class="bird-tile tile-2"></div>
-        <div class="bird-tile tile-3"></div>
-        <div class="bird-tile tile-4"></div>
-        <div class="bird-tile tile-5"></div>
-        <div class="bird-tile tile-6"></div>
-        <div class="bird-tile tile-7"></div>
-        <div class="bird-tile tile-8"></div>
-    </div>
 
-    <main class="hero-card">
-        <h1 class="hero-title">Endemic birds of Horton Plains</h1>
-        <p class="text-gray-700 text-lg mb-8">Your Gateway to Sri Lankan Heritage & Nature</p>
-        
+    <main class="relative pt-20">
+        <!-- Hero Section -->
+        <section class="max-w-7xl mx-auto px-6 py-12 grid lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8 animate-fade-in">
+                <div class="inline-block px-4 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-widest">
+                    🍃 Nature's Paradise
+                </div>
+                <h1 class="text-6xl md:text-8xl font-black leading-[0.9] text-stone-900">
+                    Endemic <span class="text-amber-700 italic">Birds</span> <br>
+                    <span class="text-3xl md:text-5xl font-light text-stone-500">of Horton Plains</span>
+                </h1>
+                <p class="text-lg text-stone-600 max-w-md leading-relaxed">
+                    Discover the rarest avian treasures hidden within the misty highlands of Sri Lanka. An immersive journey into biodiversity.
+                </p>
+                  <div class="flex flex-wrap justify-center gap-4 items-center mb-6">
+
      <div class="flex flex-wrap justify-center gap-4 items-center mb-6">
     <button onclick="openRoadMap()" class="flex items-center gap-2 bg-amber-700 text-white px-6 py-2 rounded-full font-semibold hover:bg-amber-800 transition-all">
         <img src="maps_96in128dp.png" alt="Google Maps" class="w-6 h-6 object-contain">
@@ -44,6 +55,25 @@
         ✨ Plan Trip
     </button>
 </div>
+                </div>
+            </div>
+
+            <!-- Modern Bento Grid for Images -->
+            <div class="grid grid-cols-12 grid-rows-6 gap-4 h-[600px] animate-float">
+                <div class="col-span-8 row-span-4 rounded-3xl overflow-hidden shadow-2xl">
+                    <img src="hortant4.jpg" class="w-full h-full object-cover hover:scale-110 transition duration-700">
+                </div>
+                <div class="col-span-4 row-span-2 rounded-3xl overflow-hidden shadow-xl">
+                    <img src="01.jpg" class="w-full h-full object-cover">
+                </div>
+                <div class="col-span-4 row-span-4 rounded-3xl overflow-hidden shadow-xl">
+                    <img src="horton3.jpg" class="w-full h-full object-cover">
+                </div>
+                <div class="col-span-8 row-span-2 rounded-3xl overflow-hidden shadow-xl">
+                    <img src="Hortain (1).jpg" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </section>
     </main>
 
     <div id="aiModal" class="ai-modal">
