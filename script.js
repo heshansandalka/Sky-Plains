@@ -170,21 +170,3 @@ window.onclick = function(event) {
         closeUploadModal();
     }
 }
-function openUploadModal() {
-    const modal = document.getElementById('uploadModal');
-    if(modal) {
-        modal.classList.add('active');
-        // ෆෝන් එකේදී පිටුපස පිටුව scroll වීම වැළැක්වීමට
-        document.body.style.position = 'fixed'; 
-        document.body.style.width = '100%';
-    }
-}
-
-function closeUploadModal() {
-    const modal = document.getElementById('uploadModal');
-    if(modal) {
-        modal.classList.remove('active');
-        document.body.style.position = '';
-        document.body.style.width = '';
-    }
-}
