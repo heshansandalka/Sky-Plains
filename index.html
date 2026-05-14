@@ -41,22 +41,26 @@
                 <div class="inline-block px-4 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-widest">
                     🍃 Nature's Paradise
                 </div>
-                <h1 class="text-6xl md:text-8xl font-black leading-[0.9] text-stone-900">
-                    Endemic <span class="text-amber-700 italic">Birds</span> <br>
-                    <h2 class="hero-description text-lg max-w-md leading-relaxed text-3xl md:text-5xl font-light text-stone-500">of Horton Plains</h2>
-                </h1>
-              <p class="hero-description text-lg max-w-md leading-relaxed">
-                        Discover the rarest avian treasures hidden within the misty highlands of Sri Lanka. 
-                         An immersive journey into biodiversity.
-              </p>
-     <div class="flex flex-wrap justify-center gap-4 items-center mb-6">
-    <button onclick="openRoadMap()" class="flex items-center gap-2 bg-amber-700 text-white px-6 py-2 rounded-full font-semibold hover:bg-amber-800 transition-all">
-        <img src="maps_96in128dp.png" alt="Google Maps" class="w-6 h-6 object-contain">
-        Road map
+              <div class="hero-content">
+    <h1 class="hero-title">
+        Endemic <span class="highlight-text">Birds</span>
+    </h1>
+    <h2 class="hero-subtitle">of Horton Plains</h2>
+    
+    <p class="hero-description">
+        Discover the rarest avian treasures hidden within the misty highlands of Sri Lanka. 
+        An immersive journey into biodiversity.
+    </p>
+<div class="button-group">
+    <!-- Road Map Button (Primary) -->
+    <button onclick="openRoadMap()" class="road-map-btn">
+        <img src="maps_96in128dp.png" alt="Google Maps" class="btn-icon">
+        <span>Road map</span>
     </button>
 
-    <button onclick="openItinerary()" class="border-2 border-sky-700 text-sky-800 px-6 py-2 rounded-full font-semibold hover:bg-sky-50 transition-all">
-        ✨ Plan Trip
+    <!-- Plan Trip Button (Secondary) -->
+    <button onclick="openItinerary()" class="plan-trip-btn">
+        <span class="sparkle">✨</span> Plan Trip
     </button>
 </div>
                 </div>
