@@ -1,22 +1,17 @@
 /* --- මූලික සැකසුම් (General Reset) --- */
-body {
-    font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    background-color: #000;
-    scroll-behavior: smooth;
+/* Headings සඳහා (Title) */
+h1, h2, .hero-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800; /* තදින් පෙනීමට */
+    letter-spacing: -0.02em; /* අකුරු අතර පරතරය මඳක් අඩු කිරීමෙන් Premium පෙනුමක් ලැබේ */
+}
 
-
-   
-    
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    /* පසුබිමේ ඇති වර්ණ මිශ්‍රණය (මෙය වීදුරුවට යටින් පෙනෙන වර්ණ වේ) */
-    background: radial-gradient(circle at 20% 30%, #91bdff 0%, #b0cab1 100%);
-    position: relative;
-    overflow-x: hidden;
+/* විස්තරය සඳහා (Paragraph) */
+p, .text-lg {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    line-height: 1.6; /* පේළි අතර පරතරය වැඩි කිරීමෙන් කියවීමට පහසු වේ */
+    color: rgba(255, 255, 255, 0.8); /* සම්පූර්ණ සුදු නොවන මෘදු පැහැයක් */
 }
 
 /* මුළු පිටුවම ආවරණය වන වීදුරු ස්ථරය */
@@ -89,7 +84,7 @@ body::before {
 }
 /* සියලුම විස්තරාත්මක අකුරු සඳහා */
 .hero-description {
-    color: rgba(255, 255, 255, 0.85); /* සුදු පැහැය 85% විනිවිද පෙනෙන ලෙස */
+    color: rgba(28, 10, 128, 0.85); /* සුදු පැහැය 85% විනිවිද පෙනෙන ලෙස */
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* අකුරු කැපී පෙනීමට shadow එකක් */
 }
 
