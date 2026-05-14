@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Horton Plains Lanka</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-stone-50">
+
+    <nav class="w-full p-6 flex justify-between items-center bg-white shadow-sm px-12">
+        <a href="index.html" class="text-2xl font-serif font-bold text-amber-900">Horton Plains Lanka</a>
+        <div class="flex gap-8 font-medium text-gray-700">
+            <a href="index.html" class="hover:text-amber-700">Home</a>
+            <a href="gallery.html" class="hover:text-amber-700">Gallery</a>
+            <a href="about.html" class="text-amber-700 border-b-2 border-amber-700">About Us</a>
+        </div>
+    </nav>
+    <div class="mt-12 pt-8 border-t border-gray-100 flex flex-col items-center">
+    <p class="text-sm text-gray-500 mb-2 font-medium">Enjoying our conservation efforts?</p>
+    <button onclick="toggleLike(this)" class="flex items-center gap-2 bg-white border-2 border-amber-700 text-amber-700 px-6 py-2 rounded-full font-bold hover:bg-amber-50 transition-all active:scale-95 group">
+        <span id="likeIcon" class="text-xl transition-transform group-hover:scale-110">❤️</span>
+        <span id="likeText">Like our mission</span>
+    </button>
+</div>
+
+    <main class="max-w-5xl mx-auto p-8">
+        <section class="bg-white rounded-2xl shadow-sm overflow-hidden">
+            <img src="01 (2).jpg" alt="Galle Fort" class="w-full h-80 object-cover">
+            
+            <div class="p-10">
+                <h1 class="text-4xl font-serif text-amber-900 mb-6"> Beuti Horton plains national park</h1>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 text-gray-700 leading-relaxed">
+                    <div>
+                        <h2 class="text-2xl font-serif text-amber-800 mb-4">Our Vision</h2>
+                        <p class="mb-4">
+                            Lanka Nature is a digital initiative designed to document the unique avian biodiversity of Sri Lanka. From the misty highlands of Horton Plains to the historic ramparts of Galle, we capture the essence of our island's wildlife.
+                        </p>
+                        <p>
+                            Our platform serves as a community-driven database where enthusiasts can explore high-quality photography of endemic species like the Ceylon Blue Magpie.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-stone-100 p-6 rounded-xl">
+                        <h2 class="text-xl font-serif text-amber-800 mb-4">Featured Endemic Birds</h2>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-center gap-2">🐦 <strong>Ceylon Blue Magpie</strong> - A vibrant forest dweller.</li>
+                            <li class="flex items-center gap-2">🐦 <strong>Brahminy Kite</strong> - Often seen near coastal regions.</li>
+                            <li class="flex items-center gap-2">🐦 <strong>Yellow-eared Bulbul</strong> - A highland specialty.</li>
+                            <li class="flex items-center gap-2">🐦 <strong>Sri Lanka Blue Flycatcher</strong> - Found in the dense canopy.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center py-10 text-gray-400 text-sm">
+        &copy; 2026 Horton Plains Lanka Project. All rights reserved.
+    </footer>
+
+</body>
+</html>

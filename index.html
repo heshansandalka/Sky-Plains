@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eLanka - Sri Lankan Heritage & Nature</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-white">
+
+    <nav class="absolute top-0 w-full z-[100] p-8 flex justify-center gap-12 text-white font-medium">
+        <a href="index.html" class="hover:text-amber-400 transition-colors">Home</a>
+        <a href="about.html" class="hover:text-amber-400 transition-colors bg-white-700/50 px-3 py-1 rounded-lg">About Us</a>
+        <a href="gallery.html" class="hover:text-amber-400 transition-colors bg-white-700/50 px-3 py-1 rounded-lg">Gallery</a>
+        
+    </nav>
+    
+    <div class="diagonal-container" id="grid">
+        <div class="bird-tile tile-1"></div>
+        <div class="bird-tile tile-2"></div>
+        <div class="bird-tile tile-3"></div>
+        <div class="bird-tile tile-4"></div>
+        <div class="bird-tile tile-5"></div>
+        <div class="bird-tile tile-6"></div>
+        <div class="bird-tile tile-7"></div>
+        <div class="bird-tile tile-8"></div>
+    </div>
+
+    <main class="hero-card">
+        <h1 class="hero-title">Endemic birds of Horton Plains</h1>
+        <p class="text-gray-700 text-lg mb-8">Your Gateway to Sri Lankan Heritage & Nature</p>
+        
+     <div class="flex flex-wrap justify-center gap-4 items-center mb-6">
+    <button onclick="openRoadMap()" class="flex items-center gap-2 bg-amber-700 text-white px-6 py-2 rounded-full font-semibold hover:bg-amber-800 transition-all">
+        <img src="maps_96in128dp.png" alt="Google Maps" class="w-6 h-6 object-contain">
+        Road map
+    </button>
+
+    <button onclick="openItinerary()" class="border-2 border-sky-700 text-sky-800 px-6 py-2 rounded-full font-semibold hover:bg-sky-50 transition-all">
+        ✨ Plan Trip
+    </button>
+</div>
+    </main>
+
+    <div id="aiModal" class="ai-modal">
+        <div class="ai-content">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl">&times;</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
