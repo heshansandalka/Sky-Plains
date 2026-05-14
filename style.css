@@ -1,131 +1,56 @@
+/* --- මූලික සැකසුම් (General Reset) --- */
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
     margin: 0;
+    padding: 0;
     overflow-x: hidden;
     background-color: #000;
+    scroll-behavior: smooth;
 }
 
-/* පිටුවේ අනවශ්‍ය ඉඩකඩ ඉවත් කිරීමට */
-body {
-    margin: 0;
-    padding: 0;
-}
-/* Gallery පිටුවේ පමණක් මෙය භාවිතා කරන්න */
-body {
-    padding-top: 80px; /* Navbar එකේ උසට වඩා ටිකක් වැඩි ඉඩක් */
-}
-
-/* පිටුවේ ඇති අනවශ්‍ය ඉඩකඩ ඉවත් කිරීමට */
-body {
-    margin: 0;
-    padding: 0;
-    /* පසුබිමේ පින්තූරයක් තිබේ නම් වීදුරු පෙනුම වඩාත් හොඳින් පෙනේ */
-    background: url('.jpg') no-repeat center center fixed;
-    background-size: cover;
-}
-
-/* Header එකේ Title එකට සියුම් සෙවනැල්ලක් සහ Animation එකක් */
-.font-serif {
-    letter-spacing: -0.02em;
-}
-
-/* Button එක hover කරන විට bounce වන effect එක */
-button:hover svg {
-    transform: scale(1.2) rotate(90deg);
-}
-
-/* Container එකට ඇතුලතින් එන light effect එකක් */
-.bg-white\/40 {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.2) 100%);
-    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.3);
-}
-
-/* Mobile වලදී අකුරු ප්‍රමාණය ගැලපීම */
-@media (max-width: 640px) {
-    .text-5xl {
-        font-size: 2.5rem;
-    }
-}
-
-nav {
-    /* Glassmorphism පසුබිම - ඉතා ලා සුදු (15% විනිවිදභාවය) */
-    background-color: rgba(255, 255, 255, 0.15); 
-    
-    /* වීදුරු පෙනුම ලබා දෙන ප්‍රධාන කොටස (Blur) */
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px); /* Safari සඳහා */
-
-    /* සියුම් සුදු පැහැති දාරයක් (Border) - වීදුරුවක කෙළවරවල් මෙන් පෙනීමට */
-    border: 1px solid rgba(255, 255, 255, 0.2); 
-    
-    padding: 15px 0;
-    border-radius: 12px;
-    font-family: 'Inter', sans-serif;
-    
-    /* Navbar එක පාවෙන ස්වභාවයක් ලබා දීමට */
-    width: 96%;
-    margin: 15px auto; 
-    position: sticky; /* Scroll කිරීමේදී ඉහළ රැඳී තිබීමට */
+/* --- Navigation Bar එක Mobile වලට ගැලපීම --- */
+nav, .nav-glass {
+    position: sticky;
     top: 15px;
+    width: 94%;
+    margin: 10px auto;
     z-index: 1000;
-
-    /* සියුම් හෙවනැල්ලක් (Shadow) */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    padding: 10px 0;
 }
 
 #nav-menu {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
     display: flex;
     justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap; /* කුඩා screen වලදී පහළට යාමට */
 }
 
 #nav-menu li {
-    margin: 0 25px;
+    margin: 5px 15px;
 }
 
 #nav-menu li a {
     text-decoration: none;
-    color: black; /* සුදු පැහැති අකුරු */
-    font-size: 16px;
+    color: #fff; /* පසුබිම අඳුරු නිසා අකුරු සුදු කිරීම වඩාත් සුදුසුයි */
+    font-size: 15px;
     font-weight: 500;
-    letter-spacing: 0.8px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.2); /* අකුරු පැහැදිලිව පෙනීමට */
-    transition: all 0.3s ease;
-    position: relative;
+    transition: 0.3s;
 }
 
-/* Mouse එක උඩට ගිය විට (Hover) */
-#nav-menu li a:hover {
-    color: #f10f0f; /* රන්වන් පැහැය */
-}
-
-/* Hover කළ විට යටින් ඉරක් ඇඳෙන ආකාරය */
-#nav-menu li a::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: -5px;
-    left: 0;
-    background-color: #f10f0f;
-    transition: width 0.3s ease;
-}
-
-#nav-menu li a:hover::after {
-    width: 100%;
-}
-
-
-/* Diagonal Grid Styling */
+/* --- Hero Section & Bento Grid --- */
 .diagonal-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(2, 50vh);
     width: 100vw;
-    height: 100vh;
-    position: relative;
 }
 
 .bird-tile {
@@ -133,310 +58,85 @@ nav {
     overflow: hidden;
     background-size: cover;
     background-position: center;
-    transition: transform 0.5s ease;
 }
 
-.bird-tile:nth-child(odd) {
-    clip-path: polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%);
-    margin-left: -5%;
-    margin-right: -5%;
-    z-index: 1;
-}
-
-.bird-tile:nth-child(even) {
-    clip-path: polygon(0% 0%, 85% 0%, 100% 100%, 15% 100%);
-    margin-left: -5%;
-    margin-right: -5%;
-}
-
-/* Glassmorphism Card */
-.hero-card {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    border-radius: 24px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-    max-width: 600px;
-    width: 90%;
-    padding: 3rem 2rem;
-    text-align: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 50;
-}
-
-.hero-title {
-    font-family: 'Playfair Display', serif;
-    color: #1a1a1a;
-    font-size: 3rem;
-}
-
-/* Modals */
-.ai-modal {
-    display: none;
-    background: rgba(0, 0, 0, 0.8);
-    position: fixed;
-    inset: 0;
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.ai-modal.active { display: flex; }
-
-.ai-content {
-    background: white;
-    border-radius: 16px;
-    width: 100%;
-    max-width: 700px;
-    max-height: 85vh;
-    overflow-y: auto;
-    position: relative;
-    padding: 2rem;
-}
-
-/* Loading Spinner */
-.loader {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #b45309;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-}
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-
-
-
-
-/* Specific override for the gallery page body */
-body:not(.home-page) {
-    background-color: #fcfaf8; 
-}
-
-/* Ensure images in gallery cards are consistent */
-.gallery-card img {
-    aspect-ratio: 4/3;
-    object-fit: cover;
-}
-
-/* Mobile Responsive Styles */
+/* --- Mobile Responsive (ටැබ්ලට් සහ ෆෝන් සඳහා) --- */
 @media (max-width: 768px) {
-    /* 1. Navbar එක ෆෝන් එකට ගැළපෙන ලෙස සැකසීම */
-    nav {
-        width: 92%;
-        margin: 10px auto;
-        padding: 10px 0;
-    }
-
+    /* Navbar එකේ පරතරය අඩු කිරීම */
     #nav-menu li {
-        margin: 0 10px; /* ලිංක් අතර පරතරය අඩු කිරීම */
+        margin: 5px 10px;
     }
 
     #nav-menu li a {
-        font-size: 14px; /* අකුරු පොඩ්ඩක් කුඩා කිරීම */
+        font-size: 13px;
     }
 
-    
+    /* Diagonal Layout එක පේළි 2කට සැකසීම */
     .diagonal-container {
-        grid-template-columns: repeat(2, 1fr); /* තීරු 4 වෙනුවට 2ක් කිරීම */
-        grid-template-rows: repeat(4, 30vh); /* උස ප්‍රමාණය වෙනස් කිරීම */
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(4, 25vh);
         height: auto;
     }
 
-    /* 3. පින්තූර වල හැඩය (Clip-path) ෆෝන් එකට ගැලපෙන ලෙස සරල කිරීම */
+    /* Mobile වලදී පින්තූර කැපී යන (Clip-path) එක ඉවත් කිරීම */
     .bird-tile:nth-child(odd), 
     .bird-tile:nth-child(even) {
-        clip-path: none; /* ෆෝන් එකේදී ඇද පෙනුම ඉවත් කළහොත් පින්තූර හොඳින් පෙනේ */
-        margin: 0;
-        border: 1px solid rgba(255,255,255,0.1);
+        clip-path: none !important;
+        margin: 0 !important;
     }
 
-    /* 4. මැද තියෙන Hero Card එක සැකසීම */
+    /* මැද ඇති Card එකේ ප්‍රමාණය */
     .hero-card {
         width: 85%;
-        padding: 2rem 1rem;
+        padding: 1.5rem;
     }
 
     .hero-title {
-        font-size: 1.8rem; /* මාතෘකාව කුඩා කිරීම */
+        font-size: 2rem !important;
     }
 
-    .hero-card p {
-        font-size: 14px;
+    /* Bento Grid තිබේ නම් එය සිරස් අතට හැරවීම */
+    div.h-\[600px\] {
+        height: auto !important;
+        grid-template-columns: 1fr !important;
     }
 }
 
-/* ඉතා කුඩා ෆෝන් සඳහා (Extra Small Devices) */
+/* --- ඉතා කුඩා ෆෝන් සඳහා (Small Phones) --- */
 @media (max-width: 480px) {
-    #nav-menu {
-        flex-wrap: wrap; /* ඉඩ මදි නම් links යටට යාමට */
+    nav {
+        width: 90%;
+        top: 10px;
+    }
+
+    #nav-menu li {
+        margin: 5px 8px;
+    }
+
+    /* පින්තූර එක පෙළට එක බැගින් */
+    .diagonal-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(8, 20vh);
     }
     
-    .diagonal-container {
-        grid-template-columns: 1fr; /* එක පේළියකට එක පින්තූරය බැගින් */
+    .hero-title {
+        font-size: 1.6rem !important;
     }
 }
 
-@media (max-width: 768px) {
-    body {
-        /* පින්තූරය ස්ක්‍රීන් එකටම ෆිට් වෙන්න */
-        background-attachment: scroll !important; /* Fixed වෙනුවට Scroll භාවිතා කිරීම */
-        background-position: center center; /* පින්තූරයේ මැද කොටස පෙන්වීමට */
-        background-size: cover; /* ස්ක්‍රීන් එක සම්පූර්ණයෙන් වැසීමට */
-        
-        /* Mobile එකේදී උස ප්‍රමාණය හරියට ගැනීමට */
-        min-height: 100vh;
-        height: auto;
-    }
-}
-
-body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    scroll-behavior: smooth;
-}
-
-/* Glassmorphism Navbar */
-.nav-glass {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.nav-link {
-    position: relative;
-    color: #444;
-    transition: color 0.3s ease;
-}
-
-.nav-link::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: -4px;
-    left: 0;
-    background-color: #b45309;
-    transition: width 0.3s ease;
-}
-
-.nav-link:hover::after {
-    width: 100%;
-}
-
-.nav-link.active {
-    color: #b45309;
-    font-weight: 700;
-}
-
-/* Bento Grid Floating Animation */
+/* --- Animations --- */
 @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-15px); }
-    100% { transform: translateY(0px); }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
 }
 
 .animate-float {
-    animation: float 6s ease-in-out infinite;
+    animation: float 5s ease-in-out infinite;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateX(-30px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-.animate-fade-in {
-    animation: fadeIn 1s ease-out forwards;
-}
-
-/* Modal Styling */
-.ai-modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(10px);
-    z-index: 2000;
-    align-items: center;
-    justify-content: center;
-}
-
-.ai-content {
-    background: white;
-    padding: 2.5rem;
-    border-radius: 32px;
-    width: 90%;
-    max-width: 600px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-}
-
-/* Mobile Adjustments (Max-width 768px) */
+/* Mobile වලදී animation එක වේගවත් වැඩි නම් හෝ ගැටලු ඇති වේ නම් මෙය ක්‍රියාත්මක වේ */
 @media (max-width: 768px) {
-    
-    /* 1. අකුරු වල ප්‍රමාණය නිවැරදිව override කිරීම */
-    h1.text-6xl, h1.text-8xl { 
-        font-size: 2.8rem !important; 
-        line-height: 1.1;
-    }
-    
-    /* 2. Animation එක disable කිරීම */
-    .animate-float { 
-        animation: none !important; 
-        transform: none !important;
-    }
-
-    /* 3. Bento Grid එක Mobile වලට ගැලපෙන ලෙස සකස් කිරීම */
-    /* Tailwind class එකක් නිසා !important භාවිතා කිරීම ආරක්ෂිතයි */
-    div.h-\[600px\] { 
-        height: auto !important; 
-        min-height: 400px;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr) !important; /* Column 12 සිට 2 දක්වා අඩු කිරීම */
-        grid-template-rows: auto !important;
-        gap: 10px;
-    }
-
-    /* 4. Hero section එකේ layout එක පේළියට එක බැගින් (Single column) කිරීම */
-    main section {
-        display: flex;
-        flex-direction: column; /* Grid එක වෙනුවට Flex භාවිතා කිරීම වඩාත් පහසුයි */
-        text-align: center;
-        padding-top: 2rem;
-    }
-
-    /* 5. Buttons සහ Text මැදට ගැනීම */
-    .flex.flex-wrap {
-        justify-content: center !important;
-    }
-
-    p.text-lg {
-        max-width: 100% !important;
-        text-align: center;
+    .animate-float {
+        animation: none !important;
     }
 }
-
-/* ඉතා කුඩා Screen (480px) සඳහා වැඩිදුර නිවැරදි කිරීම් */
-@media (max-width: 480px) {
-    h1.text-6xl, h1.text-8xl {
-        font-size: 2.2rem !important;
-    }
-    
-    div.h-\[600px\] {
-        grid-template-columns: 1fr !important; /* එක පේළියට එක පින්තූරය බැගින් */
-        height: auto !important;
-    }
-    
-    .nav-glass .max-w-6xl {
-        padding: 0 1rem;
-    }
-}
-
