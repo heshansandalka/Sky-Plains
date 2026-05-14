@@ -262,4 +262,16 @@ body:not(.home-page) {
     }
 }
 
+@media (max-width: 768px) {
+    body {
+        /* පින්තූරය ස්ක්‍රීන් එකටම ෆිට් වෙන්න */
+        background-attachment: scroll !important; /* Fixed වෙනුවට Scroll භාවිතා කිරීම */
+        background-position: center center; /* පින්තූරයේ මැද කොටස පෙන්වීමට */
+        background-size: cover; /* ස්ක්‍රීන් එක සම්පූර්ණයෙන් වැසීමට */
+        
+        /* Mobile එකේදී උස ප්‍රමාණය හරියට ගැනීමට */
+        min-height: 100vh;
+        height: auto;
+    }
+}
 
