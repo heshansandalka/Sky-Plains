@@ -4,50 +4,92 @@ body {
     overflow-x: hidden;
     background-color: #000;
 }
-nav ul {
+
+/* පිටුවේ අනවශ්‍ය ඉඩකඩ ඉවත් කිරීමට */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* පිටුවේ ඇති අනවශ්‍ය ඉඩකඩ ඉවත් කිරීමට */
+body {
+    margin: 0;
+    padding: 0;
+    /* පසුබිමේ පින්තූරයක් තිබේ නම් වීදුරු පෙනුම වඩාත් හොඳින් පෙනේ */
+    background: url('your-background-image.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+nav {
+    /* Glassmorphism පසුබිම - ඉතා ලා සුදු (15% විනිවිදභාවය) */
+    background-color: rgba(255, 255, 255, 0.15); 
+    
+    /* වීදුරු පෙනුම ලබා දෙන ප්‍රධාන කොටස (Blur) */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px); /* Safari සඳහා */
+
+    /* සියුම් සුදු පැහැති දාරයක් (Border) - වීදුරුවක කෙළවරවල් මෙන් පෙනීමට */
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+    
+    padding: 15px 0;
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    
+    /* Navbar එක පාවෙන ස්වභාවයක් ලබා දීමට */
+    width: 96%;
+    margin: 15px auto; 
+    position: sticky; /* Scroll කිරීමේදී ඉහළ රැඳී තිබීමට */
+    top: 15px;
+    z-index: 1000;
+
+    /* සියුම් හෙවනැල්ලක් (Shadow) */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+}
+
+#nav-menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
     display: flex;
-    list-style: none;
-    gap: 30px;
+    justify-content: center;
 }
 
-nav ul li a {
+#nav-menu li {
+    margin: 0 25px;
+}
+
+#nav-menu li a {
     text-decoration: none;
-    color: #94a3b8;
-    font-size: 0.95rem;
+    color: black; /* සුදු පැහැති අකුරු */
+    font-size: 16px;
     font-weight: 500;
+    letter-spacing: 0.8px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2); /* අකුරු පැහැදිලිව පෙනීමට */
+    transition: all 0.3s ease;
     position: relative;
-    padding: 5px 0;
-    transition: color 0.3s ease;
 }
 
-nav ul li a:hover {
-    color: #fff;
+/* Mouse එක උඩට ගිය විට (Hover) */
+#nav-menu li a:hover {
+    color: #f10f0f; /* රන්වන් පැහැය */
 }
 
-/* Underline Animation */
-nav ul li a::after {
+/* Hover කළ විට යටින් ඉරක් ඇඳෙන ආකාරය */
+#nav-menu li a::after {
     content: '';
     position: absolute;
-    bottom: 0;
-    left: 0;
     width: 0;
     height: 2px;
-    background: #38bdf8;
+    bottom: -5px;
+    left: 0;
+    background-color: #f10f0f;
     transition: width 0.3s ease;
-    box-shadow: 0 0 10px #38bdf8;
 }
 
-nav ul li a:hover::after {
+#nav-menu li a:hover::after {
     width: 100%;
 }
 
-.menu-icon {
-    display: none;
-    font-size: 1.8rem;
-    color: #38bdf8;
-    cursor: pointer;
-    z-index: 2001;
-}
 
 /* Diagonal Grid Styling */
 .diagonal-container {
@@ -161,3 +203,63 @@ body:not(.home-page) {
     aspect-ratio: 4/3;
     object-fit: cover;
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    /* 1. Navbar එක ෆෝන් එකට ගැළපෙන ලෙස සැකසීම */
+    nav {
+        width: 92%;
+        margin: 10px auto;
+        padding: 10px 0;
+    }
+
+    #nav-menu li {
+        margin: 0 10px; /* ලිංක් අතර පරතරය අඩු කිරීම */
+    }
+
+    #nav-menu li a {
+        font-size: 14px; /* අකුරු පොඩ්ඩක් කුඩා කිරීම */
+    }
+
+    /* 2. Grid එක පේළියකට 2 බැගින් පෙනෙන්න සැකසීම */
+    .diagonal-container {
+        grid-template-columns: repeat(2, 1fr); /* තීරු 4 වෙනුවට 2ක් කිරීම */
+        grid-template-rows: repeat(4, 30vh); /* උස ප්‍රමාණය වෙනස් කිරීම */
+        height: auto;
+    }
+
+    /* 3. පින්තූර වල හැඩය (Clip-path) ෆෝන් එකට ගැලපෙන ලෙස සරල කිරීම */
+    .bird-tile:nth-child(odd), 
+    .bird-tile:nth-child(even) {
+        clip-path: none; /* ෆෝන් එකේදී ඇද පෙනුම ඉවත් කළහොත් පින්තූර හොඳින් පෙනේ */
+        margin: 0;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 4. මැද තියෙන Hero Card එක සැකසීම */
+    .hero-card {
+        width: 85%;
+        padding: 2rem 1rem;
+    }
+
+    .hero-title {
+        font-size: 1.8rem; /* මාතෘකාව කුඩා කිරීම */
+    }
+
+    .hero-card p {
+        font-size: 14px;
+    }
+}
+
+/* ඉතා කුඩා ෆෝන් සඳහා (Extra Small Devices) */
+@media (max-width: 480px) {
+    #nav-menu {
+        flex-wrap: wrap; /* ඉඩ මදි නම් links යටට යාමට */
+    }
+    
+    .diagonal-container {
+        grid-template-columns: 1fr; /* එක පේළියකට එක පින්තූරය බැගින් */
+    }
+}
+
+
