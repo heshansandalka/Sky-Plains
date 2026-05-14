@@ -53,20 +53,24 @@
         </div>
     </div>
 
-    <div id="uploadModal" class="ai-modal">
-        <div class="ai-content text-center">
-            <button onclick="closeUploadModal()" class="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl">&times;</button>
-            <h2 class="text-2xl font-bold mb-4">Upload to Gallery</h2>
-            <div class="border-2 border-dashed border-gray-300 p-10 rounded-xl mb-4 bg-gray-50">
-                <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="previewImage(event)">
-                <label for="imageInput" class="cursor-pointer text-amber-700 font-semibold block">
-                    📸 Click to Select Photo
-                </label>
-                <div id="previewContainer" class="mt-4 flex justify-center"></div>
-            </div>
-            <button onclick="saveImage()" class="bg-green-700 text-white px-8 py-2 rounded-full font-bold w-full">Post to eLanka</button>
+   <!-- Upload Modal -->
+<div id="uploadModal" class="ai-modal">
+    <div class="ai-content">
+        <h2 class="text-2xl font-bold mb-4 text-amber-900">Add New Bird Photo</h2>
+        
+        <input type="text" id="newTitle" placeholder="Bird Name / Title" class="w-full p-2 mb-3 border rounded-lg">
+        <textarea id="newDesc" placeholder="Short Description" class="w-full p-2 mb-3 border rounded-lg"></textarea>
+        
+        <!-- File Input -->
+        <label class="block mb-2 text-sm font-medium text-gray-700">Select Image (PC/Mobile)</label>
+        <input type="file" id="imageInput" accept="image/*" class="w-full mb-4">
+        
+        <div class="flex gap-2">
+            <button onclick="addNewCard()" class="bg-amber-800 text-white px-4 py-2 rounded-lg flex-1">Upload & Add</button>
+            <button onclick="closeUploadModal()" class="bg-gray-200 px-4 py-2 rounded-lg">Cancel</button>
         </div>
     </div>
+</div>
 
     <script src="script.js"></script>
 </body>

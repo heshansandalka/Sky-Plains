@@ -10,8 +10,8 @@ const galleryItems = [
     { id: 6, title: "Cloud Forest", img: "horton-plains16.jpg", desc: "The heart of Horton Plains." },
     { id: 7, title: "Blue Magpie", img: "270_200_1_1588075838_CeylonBlueMagpie.jpg", desc: "Ceylon Blue Magpie." },
     { id: 8, title: "Scenic Views", img: "speed.jpg", desc: "Nature at its best." },
-    { id: 9, title: "Whistling Thrush", img: "Sri-Lanka-Whistling-Thrush_DSC1323-Enhanced-NR_Horton-Plains-Sri-Lanka-Mar-19-2025-1160x770.jpg", desc: "Rare birds." },
-    { id: 10, title: "Waterfall Trail", img: "kitulgala-nuwara-eliya-horton-plains-op-12.jpg", desc: "Hidden waterfalls." },
+    { id: 9, title: "Whistling Thrush", img: "Hortain (1).jpg", desc: "Rare birds." },
+    { id: 10, title: "Waterfall Trail", img: "horton3.jpg", desc: "Hidden waterfalls." },
     { id: 11, title: "Baker's Falls", img: "01 (1).jpg", desc: "Famous waterfall in the park." },
     { id: 12, title: "Pied Bush Chat", img: "pied-bush-chat-or-saxicola-caprata-at-horton-plains-national-reserve-HJR1P9.jpg", desc: "Wildlife photography." },
     { id: 13, title: "Highland Forest", img: "kitulgala-nuwara-eliya-horton-plains-op-10 (1).jpg", desc: "Lush greenery." },
@@ -106,3 +106,45 @@ document.querySelector('.md\:hidden').addEventListener('click', function() {
     document.getElementById('nav-menu').classList.toggle('bg-white');
     document.getElementById('nav-menu').classList.toggle('p-6');
 });
+
+function addNewCard() {
+    const title = document.getElementById('newTitle').value;
+    const desc = document.getElementById('newDesc').value;
+    const imageFile = document.getElementById('imageInput').files[0];
+
+    if (!title || !imageFile) {
+        alert("කරුණාකර නමක් සහ පින්තූරයක් තෝරන්න!");
+        return;
+    }
+
+    const reader = new FileReader();
+
+    // පින්තූරය කියවා අවසන් වූ පසු ක්‍රියාත්මක වේ
+    reader.onload = function(e) {
+        const newId = galleryItems.length + 1;
+        const newImageSrc = e.target.result; // මෙය පින්තූරයේ data (Base64) වේ
+
+        // අලුත් item එක Array එකේ මුලටම එකතු කිරීම
+        galleryItems.unshift({
+            id: newId,
+            title: title,
+            img: newImageSrc,
+            desc: desc || "Added by user"
+        });
+
+        // Gallery එක නැවත Render කිරීම
+        renderGallery();
+        
+        // Modal එක වසා දමා Input fields clear කිරීම
+        closeUploadModal();
+        clearInputs();
+    };
+
+    reader.readAsDataURL(imageFile);
+}
+
+function clearInputs() {
+    document.getElementById('newTitle').value = "";
+    document.getElementById('newDesc').value = "";
+    document.getElementById('imageInput').value = "";
+}
