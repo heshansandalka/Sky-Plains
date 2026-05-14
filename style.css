@@ -4,6 +4,50 @@ body {
     overflow-x: hidden;
     background-color: #000;
 }
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #94a3b8;
+    font-size: 0.95rem;
+    font-weight: 500;
+    position: relative;
+    padding: 5px 0;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #fff;
+}
+
+/* Underline Animation */
+nav ul li a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #38bdf8;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px #38bdf8;
+}
+
+nav ul li a:hover::after {
+    width: 100%;
+}
+
+.menu-icon {
+    display: none;
+    font-size: 1.8rem;
+    color: #38bdf8;
+    cursor: pointer;
+    z-index: 2001;
+}
 
 /* Diagonal Grid Styling */
 .diagonal-container {
