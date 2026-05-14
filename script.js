@@ -1,5 +1,15 @@
-const apiKey = "YOUR_GEMINI_API_KEY"; 
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
+const genAI = new GoogleGenerativeAI("AIzaSyAO5oXRQfDSwC2u-7WcMv5eO4nppQ0_F1E");
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+async function run() {
+  const prompt = "සැප සනීප කොහොමද?";
+  const result = await model.generateContent(prompt);
+  console.log(result.response.text());
+}
+
+run();
 const galleryItems = [
     { id: 1, title: "Horton plains", img: "LK751R0100-05-E-1280-720.webp", desc: "The ancient lion fortress." },
     { id: 2, title: "Horton plains", img: "01.jpg", desc: "The famous railway bridge in Ella." },
