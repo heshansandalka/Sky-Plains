@@ -131,45 +131,100 @@ function listenToCloudGallery() {
 async function addNewCard() {
     const title = document.getElementById('newTitle').value;
     const desc = document.getElementById('newDesc').value;
-    const imageInput = document.getElementById('imageInput');
-    const imageFile = imageInput.files[0];
+    const imageFile = document.getElementById('imageInput').files[0];
 
+    // මූලික පරීක්ෂාවන්
     if (!title || !imageFile) {
         alert("කරුණාකර නම සහ පින්තූරය ඇතුළත් කරන්න!");
         return;
     }
 
-    // දත්ත යවන අතරතුර බටන් එක disable කරමු
-    const uploadBtn = document.querySelector("button[onclick='addNewCard()']");
-    uploadBtn.innerText = "Uploading...";
-    uploadBtn.disabled = true;
+    if (!window.dbFunctions || !window.dbFunctions.addDoc) {
+        alert("Firebase තාම load වෙනවා. තත්පරයකින් ආයෙත් උත්සාහ කරන්න.");
+        return;
+    }
 
     const reader = new FileReader();
     reader.onload = async function(e) {
         const base64Image = e.target.result;
+        
+        // පින්තූරයේ ප්‍රමාණය පරීක්ෂා කිරීම (1MB ට වඩා වැඩි නම් Firestore reject කරයි)
+        if (base64Image.length > 1048487) { 
+            alert("පින්තූරය ගොඩක් ලොකුයි! කරුණාකර 1MB ට අඩු පින්තූරයක් තෝරන්න.");
+            return;
+        }
 
         try {
-            // Firestore එකට දත්ත යැවීම
-            await window.dbFunctions.addDoc(window.dbFunctions.collection(window.db, "birds"), {
+            const docRef = await window.dbFunctions.addDoc(window.dbFunctions.collection(window.db, "birds"), {
                 title: title,
                 desc: desc || "Nature wonder",
                 img: base64Image,
                 createdAt: new Date()
             });
-
-            console.log("Success!");
+            
+            console.log("Document written with ID: ", docRef.id);
             closeUploadModal();
             clearInputs();
-            uploadBtn.innerText = "Upload & Add";
-            uploadBtn.disabled = false;
         } catch (error) {
             console.error("Firebase Error: ", error);
-            alert("දෝෂයක් ආවා: " + error.message);
-            uploadBtn.innerText = "Upload & Add";
-            uploadBtn.disabled = false;
+            alert("දත්ත ඇතුළත් කිරීමේදී දෝෂයක් ආවා!");
         }
     };
     reader.readAsDataURL(imageFile);
+}
+
+// පිටුව Load වූ පසු Firestore එක Listen කිරීම අරඹන්න
+document.addEventListener('DOMContentLoaded', () => {
+    // තත්පර 1ක් ඉමු Firebase functions ටික window එකට load වෙනකම්
+    setTimeout(() => {
+        listenToCloudGallery();
+    }, 1000);
+});
+
+function listenToCloudGallery() {
+    const galleryGrid = document.getElementById('galleryGrid');
+    
+    // Check කරන්න HTML එකේ galleryGrid කියලා ID එකක් තියෙනවද කියලා
+    if (!galleryGrid) {
+        console.error("Error: 'galleryGrid' element not found in HTML!");
+        return;
+    }
+
+    if (!window.dbFunctions) {
+        console.error("Error: Firebase functions are not loaded yet!");
+        return;
+    }
+
+    console.log("Listening to Firestore 'birds' collection...");
+
+    const q = window.dbFunctions.query(
+        window.dbFunctions.collection(window.db, "birds"), 
+        window.dbFunctions.orderBy("createdAt", "desc")
+    );
+
+    window.dbFunctions.onSnapshot(q, (snapshot) => {
+        console.log("Data received from Firebase. Count:", snapshot.size);
+        let htmlContent = "";
+        
+        if (snapshot.empty) {
+            htmlContent = `<p class="text-center text-gray-500 col-span-full py-10">No birds found in database.</p>`;
+        } else {
+            snapshot.forEach((doc) => {
+                const item = doc.data();
+                htmlContent += `
+                    <div class="group overflow-hidden rounded-2xl bg-white shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer" onclick="askAI('${item.title}')">
+                        <div class="relative overflow-hidden h-64">
+                            <img src="${item.img}" alt="${item.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://via.placeholder.com/400x300?text=Image+Error'">
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-bold text-lg text-amber-900">${item.title}</h3>
+                            <p class="text-gray-500 text-sm">${item.desc || 'Explore Sri Lanka'}</p>
+                        </div>
+                    </div>`;
+            });
+        }
+        galleryGrid.innerHTML = htmlContent;
+    });
 }
 // --- Helper Functions (මෝඩල් සහ අනෙකුත් දේවල් පාලනයට) ---
 
