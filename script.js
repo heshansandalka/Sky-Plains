@@ -154,3 +154,98 @@ function openRoadMap() {
     // සැබෑ Google Maps ලින්ක් එක භාවිතා කරන්න
     window.open(`https://www.google.com/maps/dir/?api=1&destination=${destination}`, '_blank');
 }
+
+// Trip Planner Modal පාලනය
+function openItinerary() {
+    document.getElementById('tripModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeTripModal() {
+    document.getElementById('tripModal').classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+function closeModal() {
+    document.getElementById('aiModal').classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+// Gemini AI හරහා Plan එක සෑදීම
+async function generateAITripPlan() {
+    const days = document.getElementById('tripDays').value;
+    const interests = document.getElementById('tripInterests').value;
+    const modalBody = document.getElementById('modalBody');
+    const aiModal = document.getElementById('aiModal');
+
+    if (!days || !interests) {
+        alert("Please fill in both fields!");
+        return;
+    }
+
+    // Input Modal එක වසා Result Modal එක පෙන්වීම
+    closeTripModal();
+    modalBody.innerHTML = `<div class="text-center py-10"><div class="loader mx-auto"></div><p class="mt-4 text-amber-900 font-medium">Gemini is crafting your itinerary...</p></div>`;
+    aiModal.classList.add('active');
+
+    // Gemini සඳහා දෙන Prompt එක
+    const tripPrompt = `As an expert Sri Lankan tour guide, create a professional ${days} travel itinerary for Horton Plains. The user's interests are: ${interests}. Format the response with clear day-by-day headings.`;
+
+    try {
+        // ඔබ සතුව ඇති callGemini function එක මෙහිදී භාවිතා වේ
+        const result = await callGemini(tripPrompt); 
+        
+        modalBody.innerHTML = `
+            <div class="text-left p-2 max-h-[75vh] overflow-y-auto">
+                <h2 class="text-2xl font-serif font-bold text-amber-900 mb-4 border-b pb-2">Your Personal Trip Plan</h2>
+                <div class="prose prose-amber text-gray-800 leading-relaxed">
+                    ${result.split('\n').map(line => line ? `<p class="mb-2">${line}</p>` : '<br>').join('')}
+                </div>
+                <button onclick="closeModal()" class="mt-8 w-full bg-amber-800 text-white py-3 rounded-xl font-bold hover:bg-amber-900 transition-colors shadow-lg">Done Reading</button>
+            </div>`;
+    } catch (e) {
+        console.error("AI Error:", e);
+        modalBody.innerHTML = `<p class="text-red-500 p-6 text-center">AI could not generate the plan. Please check your API connection.</p>`;
+    }
+}
+async function callGemini(prompt) {
+    const API_KEY = "AIzaSyCiLrYeDfS6aZ4u4Eg0bRY-go2wpPcLyAE"; // ඔබ ලබාගත් API Key එක
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{ text: prompt }]
+                }]
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        // පිළිතුරේ ව්‍යුහය පරීක්ෂා කර ආරක්ෂිතව දත්ත ලබා ගැනීම
+        const candidate = data?.candidates?.[0];
+        const textResponse = candidate?.content?.parts?.[0]?.text;
+
+        if (textResponse) {
+            return textResponse;
+        } else {
+            console.warn("Gemini returned an empty response structure:", data);
+            return "I'm sorry, I couldn't generate a plan right now. Please try again.";
+        }
+
+    } catch (error) {
+        console.error("Gemini API Error:", error);
+        // Error එකක් throw කරනවා වෙනුවට පරිශීලකයාට පෙන්විය හැකි පණිවිඩයක් යවමු
+        return "Connection failed. Please check your internet or API key.";
+    }
+}
+

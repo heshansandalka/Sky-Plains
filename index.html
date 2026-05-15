@@ -66,6 +66,36 @@
                 </div>
             </div>
 
+            <div id="tripModal" class="ai-modal">
+    <div class="ai-content">
+        <h2 class="text-2xl font-bold mb-4 text-amber-900">Plan Your Adventure ✨</h2>
+        
+        <div class="space-y-4 text-left">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">How many days is your trip?</label>
+                <input type="text" id="tripDays" placeholder="e.g. 3 Days" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-amber-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">What are you interested in?</label>
+                <textarea id="tripInterests" placeholder="e.g. Hiking, Bird watching, Photography" class="w-full p-2 border rounded-lg h-24 focus:ring-2 focus:ring-amber-500"></textarea>
+            </div>
+            
+            <div class="flex gap-2">
+                <button onclick="generateAITripPlan()" class="bg-amber-800 text-white px-4 py-3 rounded-xl flex-1 font-bold hover:bg-amber-900 transition-all">Generate My Plan</button>
+                <button onclick="closeTripModal()" class="bg-gray-200 px-4 py-3 rounded-xl font-bold">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="aiModal" class="ai-modal">
+    <div class="ai-content">
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl">&times;</button>
+        <div id="modalBody"></div>
+    </div>
+</div>
+
+
             <!-- Modern Bento Grid for Images -->
             <div class="grid grid-cols-12 grid-rows-6 gap-4 h-[600px] animate-float">
                 <div class="col-span-8 row-span-4 rounded-3xl overflow-hidden shadow-2xl">
