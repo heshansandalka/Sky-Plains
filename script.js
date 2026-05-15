@@ -89,33 +89,42 @@ async function addNewCard() {
     }
 
     const reader = new FileReader();
-    reader.onload = async function(e) {
-        const base64Image = e.target.result;
-        
-        // Firestore limit පරීක්ෂාව
-        if (base64Image.length > 1048487) { 
-            alert("Image is too large! Please select an image under 1MB.");
-            return;
-        }
+    reader.onload = function(e) {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = async function() {
+            // පින්තූරය කුඩා කිරීමට Canvas එකක් භාවිතා කිරීම
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 800; // පින්තූරයේ පළල 800px ට අඩු කිරීම
+            const scaleSize = MAX_WIDTH / img.width;
+            canvas.width = MAX_WIDTH;
+            canvas.height = img.height * scaleSize;
 
-        try {
-            await window.dbFunctions.addDoc(window.dbFunctions.collection(window.db, "birds"), {
-                title: title,
-                desc: desc || "Nature wonder",
-                img: base64Image,
-                createdAt: new Date()
-            });
-            
-            closeUploadModal();
-            clearInputs();
-        } catch (error) {
-            console.error("Firebase Error: ", error);
-            alert("Error adding data!");
-        }
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            // පින්තූරයේ Quality එක 0.7 (70%) දක්වා අඩු කර Base64 ලබා ගැනීම
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+
+            try {
+                await window.dbFunctions.addDoc(window.dbFunctions.collection(window.db, "birds"), {
+                    title: title,
+                    desc: desc || "Nature wonder",
+                    img: compressedBase64,
+                    createdAt: new Date()
+                });
+                
+                closeUploadModal();
+                clearInputs();
+                alert("Image added successfully!");
+            } catch (error) {
+                console.error("Firebase Error: ", error);
+                alert("Error adding data!");
+            }
+        };
     };
     reader.readAsDataURL(imageFile);
 }
-
 // --- 3. AI Features ---
 
 async function askAI(topic) {
@@ -141,10 +150,7 @@ async function askAI(topic) {
 }
 
 function openRoadMap() {
-    // පරිශීලකයා සිටින තැන සිට Horton Plains වෙත මාර්ගය සෙවීමට අදාළ සැබෑ Google Maps URL එක
-    // /dir/ කියන කොටසින් 'Directions' ඉබේම විවෘත වේ
     const destination = encodeURIComponent("Horton Plains National Park, Sri Lanka");
-    const mapUrl = `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
-    
-    window.open(mapUrl, '_blank');
+    // සැබෑ Google Maps ලින්ක් එක භාවිතා කරන්න
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=${destination}`, '_blank');
 }
