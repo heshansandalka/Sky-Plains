@@ -155,23 +155,63 @@ function openRoadMap() {
     window.open(`https://www.google.com/maps/dir/?api=1&destination=${destination}`, '_blank');
 }
 
-// Trip Planner Modal පාලනය
+// --- Modal පාලනය ---
 function openItinerary() {
     document.getElementById('tripModal').classList.add('active');
     document.body.style.overflow = 'hidden';
 }
 
 function closeTripModal() {
-    document.getElementById('tripModal').classList.remove('active');
+    const tripModal = document.getElementById('tripModal');
+    if (tripModal) tripModal.classList.remove('active');
     document.body.style.overflow = 'auto';
 }
 
 function closeModal() {
-    document.getElementById('aiModal').classList.remove('active');
+    const aiModal = document.getElementById('aiModal');
+    if (aiModal) aiModal.classList.remove('active');
     document.body.style.overflow = 'auto';
 }
 
-// Gemini AI හරහා Plan එක සෑදීම
+// --- Gemini API එකට Call කරන ප්‍රධාන Function එක ---
+async function callGemini(prompt) {
+    // ඔබේ අලුත්ම API Key එක මෙතැනට දාන්න
+    const API_KEY = "AIzaSyDPjBhMdrszeJJO15EnwK-df0CLmGy9S5A"; 
+    
+    // URL එක මෙලෙස තනි පේළියට ලියන්න. 
+    // වැදගත්: ?key= පස්සේ කිසිම Space එකක් හෝ Quote එකක් තියෙන්න බෑ.
+    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + API_KEY;
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{ text: prompt }]
+                }]
+            })
+        });
+
+        const data = await response.json();
+
+        // පිළිතුර සාර්ථක දැයි බැලීම
+        if (data.candidates && data.candidates[0].content.parts[0].text) {
+            return data.candidates[0].content.parts[0].text;
+        } else {
+            // මොකක් හරි Error එකක් ආවොත් ඒක කෙලින්ම UI එකේ පෙන්වමු
+            const errorMsg = data.error ? data.error.message : "Structure Error";
+            console.error("Gemini Error:", errorMsg);
+            return "Error: " + errorMsg;
+        }
+    } catch (error) {
+        console.error("Network Error:", error);
+        return "Connection failed. Please check your internet.";
+    }
+}
+// --- ප්ලෑන් එක සහ කාලගුණය සාදන Function එක ---
 async function generateAITripPlan() {
     const days = document.getElementById('tripDays').value;
     const interests = document.getElementById('tripInterests').value;
@@ -183,69 +223,65 @@ async function generateAITripPlan() {
         return;
     }
 
-    // Input Modal එක වසා Result Modal එක පෙන්වීම
+    // Modal එක සකස් කිරීම
     closeTripModal();
-    modalBody.innerHTML = `<div class="text-center py-10"><div class="loader mx-auto"></div><p class="mt-4 text-amber-900 font-medium">Gemini is crafting your itinerary...</p></div>`;
     aiModal.classList.add('active');
+    modalBody.innerHTML = `
+        <div class="text-center py-20">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-4 border-amber-800 mb-4"></div>
+            <p class="text-amber-900 font-medium italic">Gemini is checking weather and crafting your journey...</p>
+        </div>`;
 
-    // Gemini සඳහා දෙන Prompt එක
-    const tripPrompt = `As an expert Sri Lankan tour guide, create a professional ${days} travel itinerary for Horton Plains. The user's interests are: ${interests}. Format the response with clear day-by-day headings.`;
+    // Gemini සඳහා Prompt එක
+    const prompt = `As a Sri Lankan travel expert, create a ${days} day travel itinerary for Horton Plains focusing on ${interests}. 
+    Start with a section titled "Weather Insight" about typical ${new Date().toLocaleString('default', { month: 'long' })} weather. 
+    Then list the daily plan. Use "Day X:" as headings and use emojis.`;
 
-    try {
-        // ඔබ සතුව ඇති callGemini function එක මෙහිදී භාවිතා වේ
-        const result = await callGemini(tripPrompt); 
-        
+    const result = await callGemini(prompt); 
+
+    if (!result) {
         modalBody.innerHTML = `
-            <div class="text-left p-2 max-h-[75vh] overflow-y-auto">
-                <h2 class="text-2xl font-serif font-bold text-amber-900 mb-4 border-b pb-2">Your Personal Trip Plan</h2>
-                <div class="prose prose-amber text-gray-800 leading-relaxed">
-                    ${result.split('\n').map(line => line ? `<p class="mb-2">${line}</p>` : '<br>').join('')}
-                </div>
-                <button onclick="closeModal()" class="mt-8 w-full bg-amber-800 text-white py-3 rounded-xl font-bold hover:bg-amber-900 transition-colors shadow-lg">Done Reading</button>
+            <div class="p-6 text-center">
+                <p class="text-red-600 mb-4">Connection failed. Please check your internet or API key.</p>
+                <button onclick="closeModal()" class="bg-gray-200 px-6 py-2 rounded-xl">Close</button>
             </div>`;
-    } catch (e) {
-        console.error("AI Error:", e);
-        modalBody.innerHTML = `<p class="text-red-500 p-6 text-center">AI could not generate the plan. Please check your API connection.</p>`;
+        return;
     }
+
+    // සාර්ථකව දත්ත ලැබුණාම UI එක පෙන්වීම
+    modalBody.innerHTML = `
+        <div class="text-left p-2">
+            <div class="bg-amber-50 p-6 rounded-2xl mb-6 border-l-8 border-amber-800 shadow-sm flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-serif font-bold text-amber-900 mb-1">Your Custom Journey</h2>
+                    <p class="text-amber-700 text-sm italic">${days} Day Plan • For ${interests}</p>
+                </div>
+                <div class="text-4xl animate-bounce">☀️</div>
+            </div>
+
+            <div class="px-2 space-y-4 overflow-y-auto max-h-[60vh] custom-scrollbar text-gray-800">
+                ${result.split('\n').map(line => {
+                    let trimmed = line.trim();
+                    if (!trimmed) return '';
+
+                    if (trimmed.toLowerCase().includes('weather')) {
+                        return `<div class="bg-blue-50 p-4 rounded-xl border border-blue-200 my-4 shadow-sm">
+                                    <h3 class="text-blue-800 font-bold flex items-center gap-2 mb-1">☁️ Weather Insight</h3>
+                                    <p class="text-blue-900 text-sm">${trimmed}</p>
+                                </div>`;
+                    }
+                    if (trimmed.toLowerCase().startsWith('day')) {
+                        return `<h3 class="text-xl font-bold text-amber-800 mt-6 mb-2 border-b-2 border-amber-100 pb-1">${trimmed}</h3>`;
+                    }
+                    if (trimmed.startsWith('*') || trimmed.startsWith('-')) {
+                        return `<li class="ml-4 mb-2 list-none flex items-start"><span class="text-amber-600 mr-2">🌿</span> ${trimmed.replace(/[*|-]/g, '').trim()}</li>`;
+                    }
+                    return `<p class="mb-2 leading-relaxed">${trimmed}</p>`;
+                }).join('')}
+            </div>
+
+            <button onclick="closeModal()" class="mt-8 w-full bg-amber-800 text-white py-4 rounded-2xl font-bold hover:bg-amber-900 transition-all shadow-xl active:scale-95 flex items-center justify-center gap-2 text-lg">
+                <span>Done Reading</span> ✅
+            </button>
+        </div>`;
 }
-async function callGemini(prompt) {
-    const API_KEY = "AIzaSyCiLrYeDfS6aZ4u4Eg0bRY-go2wpPcLyAE"; // ඔබ ලබාගත් API Key එක
-    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
-
-    try {
-        const response = await fetch(API_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [{ text: prompt }]
-                }]
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        
-        // පිළිතුරේ ව්‍යුහය පරීක්ෂා කර ආරක්ෂිතව දත්ත ලබා ගැනීම
-        const candidate = data?.candidates?.[0];
-        const textResponse = candidate?.content?.parts?.[0]?.text;
-
-        if (textResponse) {
-            return textResponse;
-        } else {
-            console.warn("Gemini returned an empty response structure:", data);
-            return "I'm sorry, I couldn't generate a plan right now. Please try again.";
-        }
-
-    } catch (error) {
-        console.error("Gemini API Error:", error);
-        // Error එකක් throw කරනවා වෙනුවට පරිශීලකයාට පෙන්විය හැකි පණිවිඩයක් යවමු
-        return "Connection failed. Please check your internet or API key.";
-    }
-}
-
