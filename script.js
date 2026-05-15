@@ -226,6 +226,40 @@ function listenToCloudGallery() {
         galleryGrid.innerHTML = htmlContent;
     });
 }
+
+window.dbFunctions.onSnapshot(q, (snapshot) => {
+    console.log("Firebase Data Received:", snapshot.size);
+    let htmlContent = "";
+    
+    if (snapshot.empty) {
+        htmlContent = `<p class="text-center col-span-full py-10 text-gray-500">No birds found. Add your first photo!</p>`;
+    } else {
+        snapshot.forEach((doc) => {
+            const item = doc.data();
+            
+            // පින්තූරයේ දත්ත තියෙනවාද කියලා බලමු
+            const birdImage = item.img ? item.img : 'https://via.placeholder.com/400x300?text=No+Image';
+
+            htmlContent += `
+                <div class="group overflow-hidden rounded-2xl bg-white shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer" onclick="askAI('${item.title}')">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="${birdImage}" 
+                             alt="${item.title}" 
+                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                             onerror="this.src='https://via.placeholder.com/400x300?text=Image+Error'">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg text-amber-900">${item.title}</h3>
+                        <p class="text-gray-500 text-sm line-clamp-2">${item.desc || 'Sri Lankan endemic bird.'}</p>
+                    </div>
+                </div>`;
+        });
+    }
+    const galleryGrid = document.getElementById('galleryGrid');
+    if (galleryGrid) {
+        galleryGrid.innerHTML = htmlContent;
+    }
+});
 // --- Helper Functions (මෝඩල් සහ අනෙකුත් දේවල් පාලනයට) ---
 
 function closeModal() { 
