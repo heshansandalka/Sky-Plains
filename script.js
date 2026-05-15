@@ -139,3 +139,12 @@ async function askAI(topic) {
         modalBody.innerHTML = `<p class="text-red-500 p-4">AI could not fetch information.</p>`;
     }
 }
+
+function openRoadMap() {
+    // පරිශීලකයා සිටින තැන සිට Horton Plains වෙත මාර්ගය සෙවීමට අදාළ සැබෑ Google Maps URL එක
+    // /dir/ කියන කොටසින් 'Directions' ඉබේම විවෘත වේ
+    const destination = encodeURIComponent("Horton Plains National Park, Sri Lanka");
+    const mapUrl = `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
+    
+    window.open(mapUrl, '_blank');
+}
