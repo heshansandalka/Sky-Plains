@@ -128,40 +128,49 @@ function listenToCloudGallery() {
     });
 }
 
-// 3. අලුත් Card එකක් Database එකට එක් කිරීම (Upload Function)
 async function addNewCard() {
     const title = document.getElementById('newTitle').value;
     const desc = document.getElementById('newDesc').value;
-    const imageFile = document.getElementById('imageInput').files[0];
+    const imageInput = document.getElementById('imageInput');
+    const imageFile = imageInput.files[0];
 
     if (!title || !imageFile) {
         alert("කරුණාකර නම සහ පින්තූරය ඇතුළත් කරන්න!");
         return;
     }
 
+    // දත්ත යවන අතරතුර බටන් එක disable කරමු
+    const uploadBtn = document.querySelector("button[onclick='addNewCard()']");
+    uploadBtn.innerText = "Uploading...";
+    uploadBtn.disabled = true;
+
     const reader = new FileReader();
     reader.onload = async function(e) {
-        const base64Image = e.target.result; // පින්තූරය text එකක් ලෙස පරිවර්තනය වේ
+        const base64Image = e.target.result;
 
         try {
-            // Firestore එකේ 'birds' කියන collection එකට දත්ත යැවීම
+            // Firestore එකට දත්ත යැවීම
             await window.dbFunctions.addDoc(window.dbFunctions.collection(window.db, "birds"), {
                 title: title,
                 desc: desc || "Nature wonder",
                 img: base64Image,
-                createdAt: new Date() // පිළිවෙළට පෙළගැස්වීමට අවශ්‍ය වේ
+                createdAt: new Date()
             });
 
+            console.log("Success!");
             closeUploadModal();
             clearInputs();
+            uploadBtn.innerText = "Upload & Add";
+            uploadBtn.disabled = false;
         } catch (error) {
             console.error("Firebase Error: ", error);
-            alert("Database එකට දත්ත යැවීමේදී දෝෂයක් ආවා. කරුණාකර Firestore Rules පරීක්ෂා කරන්න.");
+            alert("දෝෂයක් ආවා: " + error.message);
+            uploadBtn.innerText = "Upload & Add";
+            uploadBtn.disabled = false;
         }
     };
     reader.readAsDataURL(imageFile);
 }
-
 // --- Helper Functions (මෝඩල් සහ අනෙකුත් දේවල් පාලනයට) ---
 
 function closeModal() { 
