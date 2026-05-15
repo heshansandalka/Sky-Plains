@@ -1,5 +1,5 @@
-// 1. මුලින්ම API Key එක Define කරන්න (ඔබේ Key එක මෙතැනට දාන්න)
-const apiKey = "AIzaSyAO5oXRQfDSwC2u-7WcMv5eO4nppQ0_F1E"; 
+
+
 
 const galleryItems = [
     { id: 1, title: "Horton Plains", img: "LK751R0100-05-E-1280-720.webp", desc: "The misty highlands." },
@@ -44,27 +44,7 @@ function renderGallery() {
     `).join('');
 }
 
-// 3. callGemini function එක නිවැරදි කිරීම
-async function callGemini(prompt) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-        });
-        const data = await response.json();
-        
-        if (data.candidates && data.candidates[0].content.parts[0].text) {
-            return data.candidates[0].content.parts[0].text;
-        } else {
-            return "Could not generate content at this time.";
-        }
-    } catch (e) {
-        console.error("AI Error:", e);
-        return "The AI is currently offline.";
-    }
-}
+
 
 // Modal helper functions
 function closeModal() { document.getElementById('aiModal').classList.remove('active'); }
@@ -107,40 +87,95 @@ document.querySelector('.md\:hidden').addEventListener('click', function() {
     document.getElementById('nav-menu').classList.toggle('p-6');
 });
 
-function addNewCard() {
+// 1. පිටුව Load වූ පසු Firestore එක Listen කිරීම අරඹන්න
+document.addEventListener('DOMContentLoaded', () => {
+    listenToCloudGallery();
+});
+
+// 2. Database එකේ දත්ත Real-time කියවීම (Cloud Firestore)
+function listenToCloudGallery() {
+    const galleryGrid = document.getElementById('galleryGrid');
+    if (!galleryGrid) return;
+
+    // 'birds' collection එකෙන් අලුත්ම දත්ත මුලට එන සේ query කිරීම
+    const q = window.dbFunctions.query(
+        window.dbFunctions.collection(window.db, "birds"), 
+        window.dbFunctions.orderBy("createdAt", "desc")
+    );
+
+    // Database එකේ යමක් වෙනස් වූ වහාම Gallery එක ඉබේම Update වේ
+    window.dbFunctions.onSnapshot(q, (snapshot) => {
+        let htmlContent = "";
+        
+        if (snapshot.empty) {
+            htmlContent = `<p class="text-center text-gray-500 col-span-full py-10">No birds found. Add your first photo!</p>`;
+        } else {
+            snapshot.forEach((doc) => {
+                const item = doc.data();
+                htmlContent += `
+                    <div class="group overflow-hidden rounded-2xl bg-white shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer" onclick="askAI('${item.title}')">
+                        <div class="relative overflow-hidden h-64">
+                            <img src="${item.img}" alt="${item.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://via.placeholder.com/400x300?text=Image+Not+Found'">
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-bold text-lg text-amber-900">${item.title}</h3>
+                            <p class="text-gray-500 text-sm">${item.desc || 'A beautiful resident of Sri Lanka.'}</p>
+                        </div>
+                    </div>`;
+            });
+        }
+        galleryGrid.innerHTML = htmlContent;
+    });
+}
+
+// 3. අලුත් Card එකක් Database එකට එක් කිරීම (Upload Function)
+async function addNewCard() {
     const title = document.getElementById('newTitle').value;
     const desc = document.getElementById('newDesc').value;
     const imageFile = document.getElementById('imageInput').files[0];
 
     if (!title || !imageFile) {
-        alert("කරුණාකර නමක් සහ පින්තූරයක් තෝරන්න!");
+        alert("කරුණාකර නම සහ පින්තූරය ඇතුළත් කරන්න!");
         return;
     }
 
     const reader = new FileReader();
+    reader.onload = async function(e) {
+        const base64Image = e.target.result; // පින්තූරය text එකක් ලෙස පරිවර්තනය වේ
 
-    // පින්තූරය කියවා අවසන් වූ පසු ක්‍රියාත්මක වේ
-    reader.onload = function(e) {
-        const newId = galleryItems.length + 1;
-        const newImageSrc = e.target.result; // මෙය පින්තූරයේ data (Base64) වේ
+        try {
+            // Firestore එකේ 'birds' කියන collection එකට දත්ත යැවීම
+            await window.dbFunctions.addDoc(window.dbFunctions.collection(window.db, "birds"), {
+                title: title,
+                desc: desc || "Nature wonder",
+                img: base64Image,
+                createdAt: new Date() // පිළිවෙළට පෙළගැස්වීමට අවශ්‍ය වේ
+            });
 
-        // අලුත් item එක Array එකේ මුලටම එකතු කිරීම
-        galleryItems.unshift({
-            id: newId,
-            title: title,
-            img: newImageSrc,
-            desc: desc || "Added by user"
-        });
-
-        // Gallery එක නැවත Render කිරීම
-        renderGallery();
-        
-        // Modal එක වසා දමා Input fields clear කිරීම
-        closeUploadModal();
-        clearInputs();
+            closeUploadModal();
+            clearInputs();
+        } catch (error) {
+            console.error("Firebase Error: ", error);
+            alert("Database එකට දත්ත යැවීමේදී දෝෂයක් ආවා. කරුණාකර Firestore Rules පරීක්ෂා කරන්න.");
+        }
     };
-
     reader.readAsDataURL(imageFile);
+}
+
+// --- Helper Functions (මෝඩල් සහ අනෙකුත් දේවල් පාලනයට) ---
+
+function closeModal() { 
+    document.getElementById('aiModal').classList.remove('active'); 
+}
+
+function openUploadModal() { 
+    document.getElementById('uploadModal').classList.add('active'); 
+    document.body.style.overflow = 'hidden'; 
+}
+
+function closeUploadModal() { 
+    document.getElementById('uploadModal').classList.remove('active'); 
+    document.body.style.overflow = 'auto'; 
 }
 
 function clearInputs() {
@@ -149,38 +184,30 @@ function clearInputs() {
     document.getElementById('imageInput').value = "";
 }
 
-// Modal එක විවෘත කිරීමට
-function openUploadModal() {
-    const modal = document.getElementById('uploadModal');
+// Gemini AI function එක (මෙය ඔයාගේ index.html එකේ ඇති callGemini function එක මත පදනම් වේ)
+async function askAI(topic) {
+    const modalBody = document.getElementById('modalBody');
+    const modal = document.getElementById('aiModal');
+    
+    modalBody.innerHTML = `<div class="text-center py-10"><div class="loader mx-auto"></div><p class="mt-4 text-amber-900">Asking AI about ${topic}...</p></div>`;
     modal.classList.add('active');
-    document.body.style.overflow = 'hidden'; // පිටුව Scroll වීම නවත්වයි
-}
 
-// Modal එක වැසීමට
-function closeUploadModal() {
-    const modal = document.getElementById('uploadModal');
-    modal.classList.remove('active');
-    document.body.style.overflow = 'auto'; // නැවත Scroll වීමට ඉඩ දෙයි
-}
-
-// Modal එකෙන් පිටත Click කළහොත් වැසීමට
-window.onclick = function(event) {
-    const modal = document.getElementById('uploadModal');
-    if (event.target == modal) {
-        closeUploadModal();
+    const prompt = `Write a short, luxurious 3-sentence travel blurb about ${topic} bird in Sri Lanka.`;
+    
+    try {
+        const result = await callGemini(prompt); // callGemini function එක ඇති බවට වගබලා ගන්න
+        modalBody.innerHTML = `
+            <div class="p-2">
+                <h2 class="text-3xl font-serif font-bold text-amber-900 mb-4">${topic}</h2>
+                <p class="leading-relaxed text-gray-700 italic text-lg">"${result}"</p>
+                <button onclick="closeModal()" class="mt-8 w-full bg-amber-800 text-white py-3 rounded-xl font-bold hover:bg-amber-900 transition-colors">Close Explorer</button>
+            </div>`;
+    } catch (e) {
+        modalBody.innerHTML = `<p class="text-red-500 p-4">AI could not fetch information. Please try again.</p>`;
     }
 }
+
 function toggleMobileMenu() {
     const navLinks = document.getElementById('navLinks');
-    // 'show' class එක තිබේ නම් ඉවත් කරයි, නැත්නම් එකතු කරයි
     navLinks.classList.toggle('show');
 }
-
-// පිටත ක්ලික් කළහොත් මෙනුව ඉබේම වැසීමට (Optional)
-window.addEventListener('click', function(e) {
-    const navLinks = document.getElementById('navLinks');
-    const menuBtn = document.querySelector('.mobile-menu-btn');
-    if (!menuBtn.contains(e.target) && !navLinks.contains(e.target)) {
-        navLinks.classList.remove('show');
-    }
-});

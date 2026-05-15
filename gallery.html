@@ -82,10 +82,37 @@
         </div>
     </div>
 </div>
+
 <footer class="text-center py-10 text-gray-400 text-sm">
         &copy; 2026 Horton Plains Lanka Project. All rights reserved.
     </footer>
+     
+    <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBFL8tu0m-RO8D-uUEIROCsgTavVKVdbh4",
+    authDomain: "lanka-nature-f3d1b.firebaseapp.com",
+    projectId: "lanka-nature-f3d1b",
+    storageBucket: "lanka-nature-f3d1b.firebasestorage.app",
+    messagingSenderId: "44298565352",
+    appId: "1:44298565352:web:3c3442e27b5507ef633b5d",
+    measurementId: "G-JZCTS6W1KM"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
 
     <script src="script.js"></script>
+    
+    
 </body>
 </html>
