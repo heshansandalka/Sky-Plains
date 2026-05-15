@@ -1,3 +1,13 @@
+// --- 1. Navigation & UI Controls ---
+
+// Mobile Menu එක විවෘත කිරීමට සහ වැසීමට
+function toggleMobileMenu() {
+    const navLinks = document.getElementById('navLinks');
+    if (navLinks) {
+        navLinks.classList.toggle('show');
+    }
+}
+
 // Modal පාලනය කරන functions
 function closeModal() { 
     document.getElementById('aiModal').classList.remove('active'); 
@@ -19,6 +29,8 @@ function clearInputs() {
     document.getElementById('imageInput').value = "";
 }
 
+// --- 2. Firebase Data Handling ---
+
 // පිටුව load වූ පසු Firestore සම්බන්ධ කිරීම
 document.addEventListener('DOMContentLoaded', () => {
     // Firebase functions window එකට load වන තෙක් තත්පරයක් රැඳී සිටීම
@@ -31,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 1000);
 });
 
-// Real-time දත්ත ලබා ගැනීම
+// Real-time දත්ත ලබා ගැනීම (Cloud Firestore)
 function listenToCloudGallery() {
     const galleryGrid = document.getElementById('galleryGrid');
     if (!galleryGrid) return;
@@ -80,6 +92,7 @@ async function addNewCard() {
     reader.onload = async function(e) {
         const base64Image = e.target.result;
         
+        // Firestore limit පරීක්ෂාව
         if (base64Image.length > 1048487) { 
             alert("Image is too large! Please select an image under 1MB.");
             return;
@@ -103,7 +116,8 @@ async function addNewCard() {
     reader.readAsDataURL(imageFile);
 }
 
-// AI Explorer (සටහන: callGemini function එක ඔබේ අනිත් ගොනුවක තිබිය යුතුය)
+// --- 3. AI Features ---
+
 async function askAI(topic) {
     const modalBody = document.getElementById('modalBody');
     const modal = document.getElementById('aiModal');
@@ -112,6 +126,7 @@ async function askAI(topic) {
     modal.classList.add('active');
 
     try {
+        // index.html හි ඇති callGemini function එක භාවිතා කරයි
         const prompt = `Write a short, luxurious 3-sentence travel blurb about ${topic} bird in Sri Lanka.`;
         const result = await callGemini(prompt); 
         modalBody.innerHTML = `
