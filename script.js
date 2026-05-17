@@ -286,25 +286,73 @@ async function generateAITripPlan() {
         </div>`;
 }
 
-// --- 4. Like Button Toggle Function ---
-function toggleLike(button) {
+// --- 4. Firebase Like Counter System ---
+let userHasLiked = false; // යූසර් දැනටමත් ලයික් එකක් දාලද කියලා මතක තියාගන්න
+
+// පිටුව Load වෙද්දීම Firebase එකෙන් දැනට තියෙන සැබෑ Likes ගණන අරන් පෙන්වීම
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(async () => {
+        const likeCountSpan = document.getElementById('likeCount');
+        if (!likeCountSpan) return;
+
+        if (window.db && window.dbFunctions) {
+            try {
+                // 'stats' collection එකේ 'likesCount' document එක කියවනවා
+                const docRef = window.dbFunctions.doc(window.db, "stats", "likesCount");
+                const likeDoc = await window.dbFunctions.getDoc(docRef);
+                
+                if (likeDoc.exists()) {
+                    likeCountSpan.innerText = likeDoc.data().count || 0;
+                }
+            } catch (error) {
+                console.error("Error fetching likes from Firebase:", error);
+            }
+        }
+    }, 1500); // Firebase මුලින්ම load වෙනකන් තත්පර 1.5ක් ඉන්නවා
+});
+
+// බටන් එක ක්ලික් කරපුහම දත්ත සේව් වන ප්‍රධාන Function එක
+async function toggleLike(button) {
+    if (!window.db || !window.dbFunctions) {
+        alert("Firebase values are still loading... Please wait a moment.");
+        return;
+    }
+
     const likeIcon = document.getElementById('likeIcon');
     const likeText = document.getElementById('likeText');
+    const likeCountSpan = document.getElementById('likeCount');
     
-    // බටන් එක දැනටමත් ලයික් කරලාද බලන්න ක්ලාස් එකක් චෙක් කරනවා
-    const isLiked = button.classList.contains('bg-amber-700');
+    const docRef = window.dbFunctions.doc(window.db, "stats", "likesCount");
+    let currentLikes = parseInt(likeCountSpan.innerText) || 0;
 
-    if (!isLiked) {
-        // ලයික් කළ විට බටන් එක සම්පූර්ණ තද පාටක් කරනවා
+    if (!userHasLiked) {
+        // 1. ලයික් එකක් එකතු කිරීම (+1)
+        currentLikes += 1;
+        
+        // Firebase එකට සේව් කරනවා
+        await window.dbFunctions.setDoc(docRef, { count: currentLikes }, { merge: true });
+        
+        // UI එකේ පෙනුම වෙනස් කිරීම (තද පාට කිරීම)
         button.classList.remove('bg-white', 'text-amber-700', 'hover:bg-amber-50');
         button.classList.add('bg-amber-700', 'text-white', 'hover:bg-amber-800');
         likeText.innerText = "Mission Liked!";
         likeIcon.innerText = "💖";
+        userHasLiked = true;
     } else {
-        // නැවත ක්ලික් කරලා ලයික් එක අයින් කළ විට පරණ තත්වයට පත් කරනවා
+        // 2. ලයික් එක නැවත ක්ලික් කරලා අයින් කිරීම (-1)
+        currentLikes = Math.max(0, currentLikes - 1);
+        
+        // Firebase එක අප්ඩේට් කරනවා
+        await window.dbFunctions.setDoc(docRef, { count: currentLikes }, { merge: true });
+        
+        // UI එක පරණ විදිහට පත් කිරීම (සුදු පාට කිරීම)
         button.classList.remove('bg-amber-700', 'text-white', 'hover:bg-amber-800');
         button.classList.add('bg-white', 'text-amber-700', 'hover:bg-amber-50');
         likeText.innerText = "Like our mission";
         likeIcon.innerText = "❤️";
+        userHasLiked = false;
     }
+    
+    // අලුත්ම අංකය බටන් එක ඇතුළේ යාවත්කාලීන කිරීම
+    likeCountSpan.innerText = currentLikes;
 }
