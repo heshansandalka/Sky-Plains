@@ -285,3 +285,26 @@ async function generateAITripPlan() {
             </button>
         </div>`;
 }
+
+// --- 4. Like Button Toggle Function ---
+function toggleLike(button) {
+    const likeIcon = document.getElementById('likeIcon');
+    const likeText = document.getElementById('likeText');
+    
+    // බටන් එක දැනටමත් ලයික් කරලාද බලන්න ක්ලාස් එකක් චෙක් කරනවා
+    const isLiked = button.classList.contains('bg-amber-700');
+
+    if (!isLiked) {
+        // ලයික් කළ විට බටන් එක සම්පූර්ණ තද පාටක් කරනවා
+        button.classList.remove('bg-white', 'text-amber-700', 'hover:bg-amber-50');
+        button.classList.add('bg-amber-700', 'text-white', 'hover:bg-amber-800');
+        likeText.innerText = "Mission Liked!";
+        likeIcon.innerText = "💖";
+    } else {
+        // නැවත ක්ලික් කරලා ලයික් එක අයින් කළ විට පරණ තත්වයට පත් කරනවා
+        button.classList.remove('bg-amber-700', 'text-white', 'hover:bg-amber-800');
+        button.classList.add('bg-white', 'text-amber-700', 'hover:bg-amber-50');
+        likeText.innerText = "Like our mission";
+        likeIcon.innerText = "❤️";
+    }
+}
