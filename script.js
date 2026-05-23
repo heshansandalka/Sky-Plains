@@ -1,6 +1,6 @@
 // --- 1. Navigation & UI Controls ---
 
-// Mobile Menu එක විවෘත කිරීමට සහ වැසීමට
+//To open and close the mobile menu
 function toggleMobileMenu() {
     const navLinks = document.getElementById('navLinks');
     if (navLinks) {
@@ -8,7 +8,7 @@ function toggleMobileMenu() {
     }
 }
 
-// Modal පාලනය කරන functions
+//Modal control functions
 function closeModal() { 
     document.getElementById('aiModal').classList.remove('active'); 
 }
@@ -31,9 +31,9 @@ function clearInputs() {
 
 // --- 2. Firebase Data Handling ---
 
-// පිටුව load වූ පසු Firestore සම්බන්ධ කිරීම
+//Connecting to Firestore after the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    // Firebase functions window එකට load වන තෙක් තත්පරයක් රැඳී සිටීම
+    // Wait a second for the Firebase functions window to load.
     setTimeout(() => {
         if (window.db && window.dbFunctions) {
             listenToCloudGallery();
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 1000);
 });
 
-// Real-time දත්ත ලබා ගැනීම (Cloud Firestore)
+// Real-time data retrieval (Cloud Firestore)
 function listenToCloudGallery() {
     const galleryGrid = document.getElementById('galleryGrid');
     if (!galleryGrid) return;
@@ -77,7 +77,7 @@ function listenToCloudGallery() {
     });
 }
 
-// අලුත් පින්තූරයක් ඇතුළත් කිරීම
+// Inserting a new picture
 async function addNewCard() {
     const title = document.getElementById('newTitle').value;
     const desc = document.getElementById('newDesc').value;
@@ -93,9 +93,9 @@ async function addNewCard() {
         const img = new Image();
         img.src = e.target.result;
         img.onload = async function() {
-            // පින්තූරය කුඩා කිරීමට Canvas එකක් භාවිතා කිරීම
+            // Using a Canvas to make the image smaller
             const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 800; // පින්තූරයේ පළල 800px ට අඩු කිරීම
+            const MAX_WIDTH = 800; // Reducing the image width to 800px
             const scaleSize = MAX_WIDTH / img.width;
             canvas.width = MAX_WIDTH;
             canvas.height = img.height * scaleSize;
@@ -103,7 +103,7 @@ async function addNewCard() {
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-            // පින්තූරයේ Quality එක 0.7 (70%) දක්වා අඩු කර Base64 ලබා ගැනීම
+            // Reduce the image quality to 0.7 (70%) and get Base64
             const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
 
             try {
@@ -135,7 +135,7 @@ async function askAI(topic) {
     modal.classList.add('active');
 
     try {
-        // index.html හි ඇති callGemini function එක භාවිතා කරයි
+        // Uses the callGemini function in index.html
         const prompt = `Write a short, luxurious 3-sentence travel blurb about ${topic} bird in Sri Lanka.`;
         const result = await callGemini(prompt); 
         modalBody.innerHTML = `
@@ -151,11 +151,11 @@ async function askAI(topic) {
 
 function openRoadMap() {
     const destination = encodeURIComponent("Horton Plains National Park, Sri Lanka");
-    // සැබෑ Google Maps ලින්ක් එක භාවිතා කරන්න
+    // Use the real Google Maps link
     window.open(`https://www.google.com/maps/dir/?api=1&destination=${destination}`, '_blank');
 }
 
-// --- Modal පාලනය ---
+// --- Modal cotrol ---
 function openItinerary() {
     document.getElementById('tripModal').classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -173,13 +173,10 @@ function closeModal() {
     document.body.style.overflow = 'auto';
 }
 
-// --- Gemini API එකට Call කරන ප්‍රධාන Function එක ---
+// ---The main function that calls the Gemini API is ---
 async function callGemini(prompt) {
-    // ඔබේ අලුත්ම API Key එක මෙතැනට දාන්න
-    const API_KEY = "AIzaSyDPjBhMdrszeJJO15EnwK-df0CLmGy9S5A"; 
     
-    // URL එක මෙලෙස තනි පේළියට ලියන්න. 
-    // වැදගත්: ?key= පස්සේ කිසිම Space එකක් හෝ Quote එකක් තියෙන්න බෑ.
+    const API_KEY = "AIzaSyDPjBhMdrszeJJO15EnwK-df0CLmGy9S5A"; 
     const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + API_KEY;
 
     try {
@@ -197,11 +194,11 @@ async function callGemini(prompt) {
 
         const data = await response.json();
 
-        // පිළිතුර සාර්ථක දැයි බැලීම
+// Check if the response was successful
         if (data.candidates && data.candidates[0].content.parts[0].text) {
             return data.candidates[0].content.parts[0].text;
         } else {
-            // මොකක් හරි Error එකක් ආවොත් ඒක කෙලින්ම UI එකේ පෙන්වමු
+            // If there is an error, we will display it directly in the UI.
             const errorMsg = data.error ? data.error.message : "Structure Error";
             console.error("Gemini Error:", errorMsg);
             return "Error: " + errorMsg;
@@ -211,7 +208,7 @@ async function callGemini(prompt) {
         return "Connection failed. Please check your internet.";
     }
 }
-// --- ප්ලෑන් එක සහ කාලගුණය සාදන Function එක ---
+// ---The plan and the function that creates the weather ---
 async function generateAITripPlan() {
     const days = document.getElementById('tripDays').value;
     const interests = document.getElementById('tripInterests').value;
@@ -223,7 +220,7 @@ async function generateAITripPlan() {
         return;
     }
 
-    // Modal එක සකස් කිරීම
+    //Setting up the modal
     closeTripModal();
     aiModal.classList.add('active');
     modalBody.innerHTML = `
@@ -232,7 +229,7 @@ async function generateAITripPlan() {
             <p class="text-amber-900 font-medium italic">Gemini is checking weather and crafting your journey...</p>
         </div>`;
 
-    // Gemini සඳහා Prompt එක
+    //Prompt for Gemini
     const prompt = `As a Sri Lankan travel expert, create a ${days} day travel itinerary for Horton Plains focusing on ${interests}. 
     Start with a section titled "Weather Insight" about typical ${new Date().toLocaleString('default', { month: 'long' })} weather. 
     Then list the daily plan. Use "Day X:" as headings and use emojis.`;
@@ -248,7 +245,7 @@ async function generateAITripPlan() {
         return;
     }
 
-    // සාර්ථකව දත්ත ලැබුණාම UI එක පෙන්වීම
+    //Displaying the UI when data is successfully received
     modalBody.innerHTML = `
         <div class="text-left p-2">
             <div class="bg-amber-50 p-6 rounded-2xl mb-6 border-l-8 border-amber-800 shadow-sm flex justify-between items-center">
@@ -287,9 +284,9 @@ async function generateAITripPlan() {
 }
 
 // --- 4. Firebase Like Counter System ---
-let userHasLiked = false; // යූසර් දැනටමත් ලයික් එකක් දාලද කියලා මතක තියාගන්න
+let userHasLiked = false; 
 
-// පිටුව Load වෙද්දීම Firebase එකෙන් දැනට තියෙන සැබෑ Likes ගණන අරන් පෙන්වීම
+// Get and display the current number of Likes from Firebase as the page loads
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(async () => {
         const likeCountSpan = document.getElementById('likeCount');
@@ -297,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (window.db && window.dbFunctions) {
             try {
-                // 'stats' collection එකේ 'likesCount' document එක කියවනවා
+                // Reading the 'likesCount' document in the 'stats' collection
                 const docRef = window.dbFunctions.doc(window.db, "stats", "likesCount");
                 const likeDoc = await window.dbFunctions.getDoc(docRef);
                 
@@ -308,10 +305,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error("Error fetching likes from Firebase:", error);
             }
         }
-    }, 1500); // Firebase මුලින්ම load වෙනකන් තත්පර 1.5ක් ඉන්නවා
+    }, 1500);// Firebase waits 1.5 seconds to load first
 });
 
-// බටන් එක ක්ලික් කරපුහම දත්ත සේව් වන ප්‍රධාන Function එක
+//The main function that saves data when the button is clicked
 async function toggleLike(button) {
     if (!window.db || !window.dbFunctions) {
         alert("Firebase values are still loading... Please wait a moment.");
@@ -326,26 +323,26 @@ async function toggleLike(button) {
     let currentLikes = parseInt(likeCountSpan.innerText) || 0;
 
     if (!userHasLiked) {
-        // 1. ලයික් එකක් එකතු කිරීම (+1)
+        // 1.Adding a like (+1)
         currentLikes += 1;
         
-        // Firebase එකට සේව් කරනවා
+        // Firebase save
         await window.dbFunctions.setDoc(docRef, { count: currentLikes }, { merge: true });
         
-        // UI එකේ පෙනුම වෙනස් කිරීම (තද පාට කිරීම)
+        // Changing the appearance of the UI (bold color)
         button.classList.remove('bg-white', 'text-amber-700', 'hover:bg-amber-50');
         button.classList.add('bg-amber-700', 'text-white', 'hover:bg-amber-800');
         likeText.innerText = "Mission Liked!";
         likeIcon.innerText = "💖";
         userHasLiked = true;
     } else {
-        // 2. ලයික් එක නැවත ක්ලික් කරලා අයින් කිරීම (-1)
+        // 2.Clicking the like again and removing it (-1)
         currentLikes = Math.max(0, currentLikes - 1);
         
-        // Firebase එක අප්ඩේට් කරනවා
+        // Firebase update
         await window.dbFunctions.setDoc(docRef, { count: currentLikes }, { merge: true });
         
-        // UI එක පරණ විදිහට පත් කිරීම (සුදු පාට කිරීම)
+        // Making the UI look old (white)
         button.classList.remove('bg-amber-700', 'text-white', 'hover:bg-amber-800');
         button.classList.add('bg-white', 'text-amber-700', 'hover:bg-amber-50');
         likeText.innerText = "Like our mission";
@@ -353,6 +350,6 @@ async function toggleLike(button) {
         userHasLiked = false;
     }
     
-    // අලුත්ම අංකය බටන් එක ඇතුළේ යාවත්කාලීන කිරීම
+    // Updating the latest number inside the button
     likeCountSpan.innerText = currentLikes;
 }

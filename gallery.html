@@ -104,7 +104,7 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // Global functions විදිහට export කිරීම
+  // Global functions  export 
   window.db = db;
   window.dbFunctions = { collection, addDoc, onSnapshot, query, orderBy };
   
